@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>T3 Academy — Test. Teach. Test.</title>
+<meta name="description" content="The UK's most intelligent exam preparation platform. AI-powered learning for 11+ students and medical professionals. One platform, every exam."/>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── DESIGN TOKENS ── */
+:root{
+  /* Neutral base */
+  --ink:#0f0f12;--ink2:#1a1a22;--ink3:#252530;
+  --chalk:#fafaf8;--chalk2:#f2f2ee;--chalk3:#e8e8e2;
+  --muted:#8a8a96;--muted2:#b4b4bc;
+  --border:rgba(0,0,0,0.08);--border-dark:rgba(255,255,255,0.08);
+
+  /* 11+ branch — warm, joyful */
+  --kids-primary:#ff6b35;--kids-secondary:#ffd166;--kids-tertiary:#06d6a0;
+  --kids-bg:#fff8f0;--kids-dark:#2d1b00;
+  --kids-accent:#ff6b35;
+
+  /* Medical branch — dark, premium */
+  --med-primary:#e8ff47;--med-secondary:#a78bfa;--med-bg:#09090b;
+  --med-accent:#e8ff47;--med-dark:#09090b;
+
+  /* Active theme (switches on toggle) */
+  --active-primary:var(--kids-primary);
+  --active-bg:#ffffff;
+}
+
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  background:var(--chalk);color:var(--ink);
+  font-family:'Instrument Sans',sans-serif;
+  overflow-x:hidden;
+  transition:background 0.6s ease, color 0.6s ease;
+}
+body.med-mode{background:var(--ink);color:var(--chalk);}
+
+/* ── CURSOR ── */
+*, *:hover { cursor: default; }
+a, button, [onclick], label { cursor: pointer !important; }
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;display:flex;align-items:center;padding:0 48px;
+  justify-content:space-between;
+  transition:background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+  background:rgba(250,250,248,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+body.med-mode nav{
+  background:rgba(9,9,11,0.85);
+  border-bottom:1px solid var(--border-dark);
+}
+
+.nav-logo{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:900;font-size:22px;color:var(--ink);
+  text-decoration:none;letter-spacing:-0.5px;
+  display:flex;align-items:center;gap:10px;
+  transition:color 0.4s;
+}
+body.med-mode .nav-logo{color:var(--chalk);}
+.nav-logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--kids-primary);
+  transition:background 0.4s;
+}
+body.med-mode .nav-logo-dot{background:var(--med-primary);}
+
+/* ── BRANCH TOGGLE ── */
+.branch-toggle{
+  display:flex;align-items:center;
+  background:var(--chalk2);border:1.5px solid var(--chalk3);
+  border-radius:100px;padding:4px;
+  transition:background 0.4s, border-color 0.4s;
+  position:relative;
+}
+body.med-mode .branch-toggle{
+  background:var(--ink2);border-color:var(--ink3);
+}
+.toggle-pill{
+  position:absolute;top:4px;left:4px;
+  height:calc(100% - 8px);border-radius:100px;
+  background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), width 0.2s;
+  pointer-events:none;
+}
+body.med-mode .toggle-pill{background:var(--ink3);}
+.branch-btn{
+  position:relative;z-index:1;
+  padding:8px 20px;border-radius:100px;border:none;background:transparent;
+  font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;transition:color 0.25s;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.branch-btn.active{color:var(--ink);}
+body.med-mode .branch-btn.active{color:var(--chalk);}
+
+.nav-actions{display:flex;align-items:center;gap:12px;}
+.btn-login{
+  font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;
+  color:var(--muted);background:transparent;border:none;padding:8px 16px;
+  border-radius:8px;text-decoration:none;transition:color 0.2s;
+}
+.btn-login:hover{color:var(--ink);}
+body.med-mode .btn-login:hover{color:var(--chalk);}
+.btn-cta{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;
+  padding:10px 24px;border-radius:100px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:all 0.2s;background:var(--kids-primary);color:white;
+}
+body.med-mode .btn-cta{background:var(--med-primary);color:var(--ink);}
+.btn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,53,0.3);}
+body.med-mode .btn-cta:hover{box-shadow:0 6px 20px rgba(232,255,71,0.25);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 24px 80px;text-align:center;
+  position:relative;overflow:hidden;
+}
+
+/* kids background */
+.hero-bg-kids{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255,209,102,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6,214,160,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 70%);
+  transition:opacity 0.6s ease;
+}
+/* floating shapes kids */
+.shape{position:absolute;border-radius:50%;pointer-events:none;}
+.s1{width:80px;height:80px;background:rgba(255,107,53,0.12);top:15%;left:8%;animation:float1 6s ease-in-out infinite;}
+.s2{width:50px;height:50px;background:rgba(255,209,102,0.2);top:25%;right:10%;animation:float2 8s ease-in-out infinite;}
+.s3{width:120px;height:120px;background:rgba(6,214,160,0.1);bottom:20%;left:5%;animation:float1 7s ease-in-out infinite 1s;}
+.s4{width:40px;height:40px;background:rgba(255,107,53,0.15);bottom:30%;right:8%;animation:float2 5s ease-in-out infinite 0.5s;}
+.s5{width:200px;height:200px;background:rgba(255,209,102,0.06);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 4s ease-in-out infinite;border-radius:50%;}
+@keyframes float1{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(5deg);}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(-4deg);}}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
+
+/* med background */
+.hero-bg-med{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(232,255,71,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 60%, rgba(167,139,250,0.08) 0%, transparent 60%);
+  opacity:0;transition:opacity 0.6s ease;pointer-events:none;
+}
+body.med-mode .hero-bg-med{opacity:1;}
+body.med-mode .hero-bg-kids{opacity:0;}
+body.med-mode .shape{opacity:0;}
+
+/* grid texture med */
+.med-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:48px 48px;
+  opacity:0;transition:opacity 0.6s;pointer-events:none;
+}
+body.med-mode .med-grid{opacity:1;}
+
+/* ── MASCOT ── */
+.hero-mascot{
+  position:relative;z-index:2;margin-bottom:28px;
+  animation:mascotEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes mascotEntrance{from{opacity:0;transform:scale(0.5) translateY(30px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.mascot-circle{
+  width:120px;height:120px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:60px;margin:0 auto;
+  box-shadow:0 16px 48px rgba(255,107,53,0.25);
+  background:linear-gradient(135deg,#ff9a5c,#ff6b35);
+  border:4px solid white;
+  animation:owlBob 3s ease-in-out infinite;
+  transition:background 0.6s, box-shadow 0.6s;
+}
+body.med-mode .mascot-circle{
+  background:linear-gradient(135deg,#7c3aed,#a78bfa);
+  box-shadow:0 16px 48px rgba(167,139,250,0.3);
+  border-color:rgba(255,255,255,0.1);
+}
+@keyframes owlBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.mascot-name{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;
+  color:var(--kids-primary);letter-spacing:2px;text-transform:uppercase;
+  margin-top:10px;transition:color 0.4s;
+}
+body.med-mode .mascot-name{color:var(--med-secondary);}
+
+/* ── HERO TEXT ── */
+.hero-eyebrow{
+  font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:20px;
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.3s ease both;
+}
+.hero-h1{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:900;font-size:clamp(48px,7vw,88px);
+  letter-spacing:-3px;line-height:0.95;
+  color:var(--ink);margin-bottom:16px;
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.4s ease both;
+  transition:color 0.4s;
+}
+body.med-mode .hero-h1{color:var(--chalk);}
+.hero-h1 .accent-kids{
+  color:var(--kids-primary);
+  display:inline-block;
+  transition:color 0.4s;
+}
+body.med-mode .hero-h1 .accent-kids{color:var(--med-primary);}
+.hero-sub{
+  font-size:clamp(17px,2vw,21px);color:var(--muted);
+  font-weight:400;max-width:580px;line-height:1.6;
+  margin:0 auto 40px;position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.5s ease both;
+}
+
+/* ── BRANCH CARDS ── */
+.branch-cards{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:2;margin-bottom:48px;
+  animation:fadeUp 0.6s 0.6s ease both;
+}
+.branch-card{
+  background:white;border-radius:24px;
+  border:2px solid var(--chalk3);
+  padding:32px 28px;width:280px;text-align:left;
+  cursor:pointer;transition:all 0.25s;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.06);
+}
+body.med-mode .branch-card{
+  background:var(--ink2);border-color:var(--ink3);
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+}
+.branch-card:hover{transform:translateY(-6px);}
+.branch-card.kids-card:hover{
+  border-color:var(--kids-primary);
+  box-shadow:0 16px 48px rgba(255,107,53,0.2);
+}
+.branch-card.med-card:hover{
+  border-color:var(--med-primary);
+  box-shadow:0 16px 48px rgba(232,255,71,0.15);
+}
+.branch-card-stripe{
+  position:absolute;top:0;left:0;right:0;height:4px;border-radius:24px 24px 0 0;
+}
+.kids-stripe{background:linear-gradient(90deg,var(--kids-primary),var(--kids-secondary));}
+.med-stripe{background:linear-gradient(90deg,var(--med-primary),var(--med-secondary));}
+.branch-card-icon{font-size:40px;margin-bottom:16px;display:block;}
+.branch-card-label{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.kids-label{color:var(--kids-primary);}
+.med-label{color:var(--med-primary);}
+.branch-card-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:22px;
+  color:var(--ink);margin-bottom:8px;letter-spacing:-0.5px;
+  transition:color 0.4s;
+}
+body.med-mode .branch-card-title{color:var(--chalk);}
+.branch-card-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.branch-card-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;
+  padding:10px 20px;border-radius:100px;border:none;cursor:pointer;
+  transition:all 0.2s;
+}
+.kids-btn{background:var(--kids-primary);color:white;}
+.kids-btn:hover{background:#e85a25;}
+.med-btn{background:var(--med-primary);color:var(--ink);}
+.med-btn:hover{background:var(--med-secondary);color:white;}
+.branch-card-exams{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;
+}
+.exam-tag{
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;
+  background:var(--chalk2);color:var(--muted);
+  transition:background 0.4s;
+}
+body.med-mode .exam-tag{background:var(--ink3);color:var(--muted);}
+
+/* ── SOCIAL PROOF ── */
+.social-proof{
+  display:flex;align-items:center;gap:20px;justify-content:center;
+  font-size:13px;color:var(--muted);
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.7s ease both;
+  flex-wrap:wrap;
+}
+.proof-item{display:flex;align-items:center;gap:6px;}
+.proof-dot{width:5px;height:5px;border-radius:50%;background:var(--kids-primary);flex-shrink:0;transition:background 0.4s;}
+body.med-mode .proof-dot{background:var(--med-primary);}
+
+/* ── HOW IT WORKS ── */
+.section{padding:100px 24px;max-width:1100px;margin:0 auto;}
+.section-eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--kids-primary);margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .section-eyebrow{color:var(--med-primary);}
+.section-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:900;
+  font-size:clamp(32px,4vw,52px);letter-spacing:-1.5px;
+  color:var(--ink);line-height:1.05;margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .section-title{color:var(--chalk);}
+.section-sub{font-size:18px;color:var(--muted);font-weight:400;max-width:520px;line-height:1.6;}
+
+/* T3 steps */
+.t3-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;border-radius:20px;overflow:hidden;border:1px solid var(--chalk3);}
+body.med-mode .t3-steps{border-color:var(--ink3);}
+.t3-step{
+  padding:40px 32px;background:white;position:relative;
+  transition:background 0.4s;
+}
+body.med-mode .t3-step{background:var(--ink2);}
+.t3-step+.t3-step{border-left:1px solid var(--chalk3);}
+body.med-mode .t3-step+.t3-step{border-left-color:var(--ink3);}
+.t3-step:hover{background:var(--chalk2);}
+body.med-mode .t3-step:hover{background:var(--ink3);}
+.step-num{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:80px;font-weight:900;
+  line-height:1;letter-spacing:-3px;
+  color:rgba(255,107,53,0.08);margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .step-num{color:rgba(232,255,71,0.06);}
+.step-icon{font-size:32px;margin-bottom:16px;display:block;}
+.step-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:22px;
+  letter-spacing:-0.5px;color:var(--ink);margin-bottom:10px;
+  transition:color 0.4s;
+}
+body.med-mode .step-title{color:var(--chalk);}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+.step-highlight{color:var(--kids-primary);font-weight:600;transition:color 0.4s;}
+body.med-mode .step-highlight{color:var(--med-primary);}
+
+/* ── OLLIE SECTION ── */
+.ollie-section{
+  background:linear-gradient(135deg,#fff5f0,#fff8e8);
+  border-radius:28px;padding:64px;margin:0 24px;
+  display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:center;
+  border:1px solid rgba(255,107,53,0.15);
+  transition:all 0.6s;
+}
+body.med-mode .ollie-section{
+  background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(232,255,71,0.04));
+  border-color:rgba(232,255,71,0.1);
+}
+.ollie-left .section-eyebrow{margin-bottom:16px;}
+.ollie-features{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+.ollie-feature{display:flex;align-items:flex-start;gap:12px;}
+.ollie-feature-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:rgba(255,107,53,0.1);display:flex;align-items:center;
+  justify-content:center;font-size:16px;
+  transition:background 0.4s;
+}
+body.med-mode .ollie-feature-icon{background:rgba(232,255,71,0.08);}
+.ollie-feature-text{font-size:14px;color:var(--muted);line-height:1.6;padding-top:6px;}
+.ollie-feature-text strong{color:var(--ink);transition:color 0.4s;}
+body.med-mode .ollie-feature-text strong{color:var(--chalk);}
+
+/* Ollie chat preview */
+.ollie-chat{
+  background:white;border-radius:20px;padding:20px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.1);
+  border:1px solid var(--chalk3);
+  transition:background 0.4s, border-color 0.4s;
+}
+body.med-mode .ollie-chat{background:var(--ink2);border-color:var(--ink3);box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+.chat-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--chalk3);}
+body.med-mode .chat-header{border-bottom-color:var(--ink3);}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff9a5c,#ff6b35);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+body.med-mode .chat-avatar{background:linear-gradient(135deg,#7c3aed,#a78bfa);}
+.chat-name{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:14px;color:var(--ink);transition:color 0.4s;}
+body.med-mode .chat-name{color:var(--chalk);}
+.chat-status{font-size:11px;color:var(--muted);}
+.chat-messages{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.chat-msg{padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6;max-width:85%;}
+.chat-msg.ollie-msg{
+  background:rgba(255,107,53,0.08);border-bottom-left-radius:4px;
+  color:var(--ink);font-weight:500;
+  transition:background 0.4s, color 0.4s;
+}
+body.med-mode .chat-msg.ollie-msg{background:rgba(167,139,250,0.12);color:var(--chalk);}
+.chat-msg.user-msg{
+  background:var(--kids-primary);color:white;
+  border-bottom-right-radius:4px;align-self:flex-end;
+  transition:background 0.4s;
+}
+body.med-mode .chat-msg.user-msg{background:var(--med-secondary);}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input-fake{
+  flex:1;background:var(--chalk2);border-radius:100px;
+  padding:10px 16px;font-size:13px;color:var(--muted);
+  border:1px solid var(--chalk3);
+  transition:background 0.4s, border-color 0.4s;
+}
+body.med-mode .chat-input-fake{background:var(--ink3);border-color:rgba(255,255,255,0.06);color:var(--muted);}
+.chat-send{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--kids-primary);display:flex;
+  align-items:center;justify-content:center;font-size:14px;color:white;
+  flex-shrink:0;transition:background 0.4s;
+  border:none;
+}
+body.med-mode .chat-send{background:var(--med-primary);color:var(--ink);}
+
+/* ── FEATURES GRID ── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+.feat-card{
+  background:white;border:1px solid var(--chalk3);border-radius:18px;padding:28px;
+  transition:all 0.2s;
+}
+body.med-mode .feat-card{background:var(--ink2);border-color:var(--ink3);}
+.feat-card:hover{transform:translateY(-3px);border-color:var(--kids-primary);}
+body.med-mode .feat-card:hover{border-color:var(--med-primary);}
+.feat-icon{font-size:28px;margin-bottom:14px;}
+.feat-title{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:17px;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px;transition:color 0.4s;}
+body.med-mode .feat-title{color:var(--chalk);}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;align-items:start;}
+.price-card{
+  background:white;border:1.5px solid var(--chalk3);border-radius:20px;padding:32px;
+  position:relative;transition:all 0.2s;
+}
+body.med-mode .price-card{background:var(--ink2);border-color:var(--ink3);}
+.price-card.featured{border-color:var(--kids-primary);}
+body.med-mode .price-card.featured{border-color:var(--med-primary);}
+.price-card:hover{transform:translateY(-3px);}
+.price-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--kids-primary);color:white;
+  font-size:11px;font-weight:700;padding:4px 16px;border-radius:100px;
+  white-space:nowrap;letter-spacing:0.5px;
+  transition:background 0.4s;
+}
+body.med-mode .price-badge{background:var(--med-primary);color:var(--ink);}
+.price-audience{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.price-name{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:6px;letter-spacing:-0.5px;transition:color 0.4s;}
+body.med-mode .price-name{color:var(--chalk);}
+.price-desc{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.price-amount{display:flex;align-items:baseline;gap:3px;margin-bottom:24px;}
+.price-currency{font-size:18px;color:var(--muted);font-weight:500;margin-top:6px;}
+.price-num{font-family:'Cabinet Grotesk',sans-serif;font-size:52px;font-weight:900;color:var(--ink);letter-spacing:-2px;line-height:1;transition:color 0.4s;}
+body.med-mode .price-num{color:var(--chalk);}
+.price-period{font-size:14px;color:var(--muted);}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.price-features li{font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.price-features li::before{
+  content:'✓';font-weight:700;color:var(--kids-primary);flex-shrink:0;
+  transition:color 0.4s;
+}
+body.med-mode .price-features li::before{color:var(--med-primary);}
+.price-btn{
+  width:100%;padding:13px;border-radius:100px;font-family:'Cabinet Grotesk',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;
+}
+.price-btn-outline{background:transparent;border:1.5px solid var(--chalk3);color:var(--ink);transition:all 0.2s;}
+body.med-mode .price-btn-outline{border-color:var(--ink3);color:var(--chalk);}
+.price-btn-outline:hover{border-color:var(--kids-primary);color:var(--kids-primary);}
+body.med-mode .price-btn-outline:hover{border-color:var(--med-primary);color:var(--med-primary);}
+.price-btn-filled{background:var(--kids-primary);color:white;transition:background 0.4s;}
+body.med-mode .price-btn-filled{background:var(--med-primary);color:var(--ink);}
+.price-btn-filled:hover{background:#e85a25;}
+body.med-mode .price-btn-filled:hover{background:var(--med-secondary);color:white;}
+
+/* ── CTA SECTION ── */
+.cta-section{
+  margin:0 24px 80px;border-radius:28px;
+  background:linear-gradient(135deg,var(--kids-primary),#ff9a5c);
+  padding:80px;text-align:center;position:relative;overflow:hidden;
+  transition:all 0.6s;
+}
+body.med-mode .cta-section{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid var(--ink3);}
+.cta-section h2{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(36px,5vw,60px);
+  font-weight:900;letter-spacing:-2px;color:white;line-height:1.05;margin-bottom:16px;
+}
+body.med-mode .cta-section h2{color:var(--chalk);}
+.cta-section p{font-size:18px;color:rgba(255,255,255,0.8);margin-bottom:36px;}
+body.med-mode .cta-section p{color:var(--muted);}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-cta-white{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;
+  padding:14px 32px;border-radius:100px;border:none;cursor:pointer;
+  background:white;color:var(--kids-primary);
+  transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+body.med-mode .btn-cta-white{background:var(--med-primary);color:var(--ink);}
+.btn-cta-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.2);}
+.btn-cta-ghost{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;
+  padding:14px 32px;border-radius:100px;border:2px solid rgba(255,255,255,0.4);
+  cursor:pointer;background:transparent;color:white;
+  transition:all 0.2s;text-decoration:none;
+}
+.btn-cta-ghost:hover{background:rgba(255,255,255,0.1);border-color:white;}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--chalk3);padding:48px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  transition:border-color 0.4s;
+}
+body.med-mode footer{border-top-color:var(--ink3);}
+.footer-logo{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:18px;color:var(--ink);transition:color 0.4s;}
+body.med-mode .footer-logo{color:var(--chalk);}
+.footer-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--ink);}
+body.med-mode .footer-links a:hover{color:var(--chalk);}
+.footer-copy{font-size:12px;color:var(--muted2);}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--chalk3);margin:0 24px;transition:background 0.4s;}
+body.med-mode .divider{background:var(--ink3);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .branch-toggle{display:none;}
+  .t3-steps,.features-grid,.pricing-grid{grid-template-columns:1fr;}
+  .t3-step+.t3-step{border-left:none;border-top:1px solid var(--chalk3);}
+  .ollie-section{grid-template-columns:1fr;padding:36px 24px;}
+  .ollie-chat{display:none;}
+  .cta-section{padding:48px 24px;margin:0 16px 48px;}
+  footer{padding:32px 20px;flex-direction:column;align-items:flex-start;}
+  .section{padding:64px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    T3 Academy
+  </a>
+
+  <div class="branch-toggle" id="branchToggle">
+    <div class="toggle-pill" id="togglePill"></div>
+    <button class="branch-btn active" id="kidsBtn" onclick="setMode('kids')">
+      🦉 11+ & Schools
+    </button>
+    <button class="branch-btn" id="medBtn" onclick="setMode('med')">
+      🩺 Medical Exams
+    </button>
+  </div>
+
+  <div class="nav-actions">
+    <a href="#" class="btn-login">Sign in</a>
+    <a href="#" class="btn-cta" id="navCta">Start free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg-kids" id="bgKids"></div>
+  <div class="hero-bg-med"></div>
+  <div class="med-grid"></div>
+
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="shape s4"></div>
+  <div class="shape s5"></div>
+
+  <div class="hero-mascot">
+    <div class="mascot-circle" id="mascotCircle">🦉</div>
+    <div class="mascot-name" id="mascotName">Ollie the Owl</div>
+  </div>
+
+  <div class="hero-eyebrow" id="heroEyebrow">The UK's most intelligent exam platform</div>
+
+  <h1 class="hero-h1" id="heroH1">
+    Learn smarter.<br>Pass <span class="accent-kids" id="accentWord">every</span> exam.
+  </h1>
+
+  <p class="hero-sub" id="heroSub">
+    One platform. Every exam. AI-powered teaching that adapts to how your brain works — then tests you when you're ready.
+  </p>
+
+  <div class="branch-cards">
+    <div class="branch-card kids-card" onclick="setMode('kids');document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      <div class="branch-card-stripe kids-stripe"></div>
+      <span class="branch-card-icon">🦉</span>
+      <div class="branch-card-label kids-label">Ages 9–11</div>
+      <div class="branch-card-title">11+ Preparation</div>
+      <div class="branch-card-desc">GL Assessment-aligned. English, Maths, Verbal & Non-Verbal Reasoning. Ollie guides every step.</div>
+      <button class="branch-card-btn kids-btn">Start learning →</button>
+      <div class="branch-card-exams">
+        <span class="exam-tag">GL Assessment</span>
+        <span class="exam-tag">English</span>
+        <span class="exam-tag">Maths</span>
+        <span class="exam-tag">VR</span>
+        <span class="exam-tag">NVR</span>
+      </div>
+    </div>
+
+    <div class="branch-card med-card" onclick="setMode('med');document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      <div class="branch-card-stripe med-stripe"></div>
+      <span class="branch-card-icon">🩺</span>
+      <div class="branch-card-label med-label">Postgraduate</div>
+      <div class="branch-card-title">Medical Exams</div>
+      <div class="branch-card-desc">MRCP, MRCS, SCE, PLAB, MSRA. Concept-first teaching, clinical vignettes, AI-powered mock exams.</div>
+      <button class="branch-card-btn med-btn">Explore exams →</button>
+      <div class="branch-card-exams">
+        <span class="exam-tag">MRCP</span>
+        <span class="exam-tag">SCE</span>
+        <span class="exam-tag">MRCS</span>
+        <span class="exam-tag">PLAB</span>
+        <span class="exam-tag">MSRA</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="social-proof">
+    <div class="proof-item"><div class="proof-dot"></div>Powered by Claude AI</div>
+    <div class="proof-item"><div class="proof-dot"></div>GL Assessment aligned</div>
+    <div class="proof-item"><div class="proof-dot"></div>7-day free trial</div>
+    <div class="proof-item"><div class="proof-dot"></div>No card required</div>
+  </div>
+</div>
+
+<!-- T3 METHOD -->
+<div class="divider"></div>
+<section class="section reveal" id="method">
+  <div class="section-eyebrow">The T3 method</div>
+  <h2 class="section-title">Test. Teach. Test.<br>It actually works.</h2>
+  <p class="section-sub">Built on evidence-based learning science. Not flashcards. Not videos. A complete preparation loop.</p>
+
+  <div class="t3-steps">
+    <div class="t3-step">
+      <div class="step-num">01</div>
+      <span class="step-icon">📊</span>
+      <div class="step-title">Test first</div>
+      <p class="step-desc">Before any teaching, we test. A <span class="step-highlight">baseline assessment</span> reveals exactly where the gaps are — so we don't waste time on what you already know.</p>
+    </div>
+    <div class="t3-step">
+      <div class="step-num">02</div>
+      <span class="step-icon">🎯</span>
+      <div class="step-title">Targeted teaching</div>
+      <p class="step-desc">AI maps your weaknesses and delivers <span class="step-highlight">concept-first teaching</span> — visual explanations, flowcharts, analogies, ADHD-friendly breakdowns. However your brain learns.</p>
+    </div>
+    <div class="t3-step">
+      <div class="step-num">03</div>
+      <span class="step-icon">✅</span>
+      <div class="step-title">Test again</div>
+      <p class="step-desc">A second test after teaching measures <span class="step-highlight">real improvement</span> — topic by topic. Then branches into new question variants so you can't just memorise answers.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OLLIE SECTION -->
+<div class="ollie-section reveal" id="features">
+  <div class="ollie-left">
+    <div class="section-eyebrow">Meet your AI tutor</div>
+    <h2 class="section-title" style="font-size:clamp(28px,3.5vw,44px);">Ollie is always<br>inside the question.</h2>
+    <p class="section-sub" style="font-size:16px;">Not a chatbot bolted on the side. Ollie lives inside every question, ready to explain, hint, simplify, or quiz — without pulling you away from the topic.</p>
+
+    <div class="ollie-features">
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">💬</div>
+        <div class="ollie-feature-text"><strong>Explain it differently</strong> — standard, visual map, ADHD mode, analogy, or quiz. You choose how you learn.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">🎯</div>
+        <div class="ollie-feature-text"><strong>Stays on topic</strong> — Ollie keeps you focused. No rabbit holes. Help when stuck, then back to learning.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">🔁</div>
+        <div class="ollie-feature-text"><strong>Generates variants</strong> — same concept, different question. Until you truly understand it, not just remember it.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">📈</div>
+        <div class="ollie-feature-text"><strong>Tracks everything</strong> — time spent, accuracy by topic, improvement over sessions. Parents and students both see progress.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ollie-chat">
+    <div class="chat-header">
+      <div class="chat-avatar">🦉</div>
+      <div>
+        <div class="chat-name">Ollie the Owl</div>
+        <div class="chat-status">Powered by Claude AI · always here</div>
+      </div>
+    </div>
+    <div class="chat-messages">
+      <div class="chat-msg ollie-msg">I can see you found that synonym question tricky! Let me explain it a different way 🦉</div>
+      <div class="chat-msg user-msg">Yes please! I don't understand what "ancient" means</div>
+      <div class="chat-msg ollie-msg">Think of a really old castle — so old your great-great-great-grandparents weren't even born yet. That's <strong>ancient</strong>! It means incredibly, incredibly old. ⭐</div>
+      <div class="chat-msg user-msg">Oh! Like the Romans?</div>
+      <div class="chat-msg ollie-msg">Exactly! Ancient Rome, ancient Egypt — perfect examples. Now try the question again — you've got this! 🎉</div>
+    </div>
+    <div class="chat-input-row">
+      <div class="chat-input-fake">Ask Ollie anything…</div>
+      <button class="chat-send">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section reveal">
+  <div class="section-eyebrow">Everything included</div>
+  <h2 class="section-title">One subscription.<br>Everything you need.</h2>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">⏱</div><div class="feat-title">Timed mock exams</div><p class="feat-desc">Exam-realistic, timed mocks with instant results, per-question explanations, and performance breakdown.</p></div>
+    <div class="feat-card"><div class="feat-icon">🧠</div><div class="feat-title">AI weakness mapping</div><p class="feat-desc">After every session, your personalised weakness report shows exactly what to focus on next.</p></div>
+    <div class="feat-card"><div class="feat-icon">🗺</div><div class="feat-title">Visual concept maps</div><p class="feat-desc">Topics explained visually — flowcharts, diagrams, and animated breakdowns built into every module.</p></div>
+    <div class="feat-card"><div class="feat-icon">🔁</div><div class="feat-title">Question branching</div><p class="feat-desc">AI generates fresh questions on the same concept. Different vignette, same learning objective. Mastery, not memory.</p></div>
+    <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-title">Homework & assignments</div><p class="feat-desc">Structured weekly homework with deadlines. Parents can track completion. Students earn XP for finishing.</p></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Progress dashboard</div><p class="feat-desc">Live progress tracking across every topic. See where you started, how far you've come, and what's next.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="section reveal">
+  <div class="section-eyebrow">Pricing</div>
+  <h2 class="section-title">Simple, honest pricing.</h2>
+  <p class="section-sub">Less than one tutoring session. More than any tutor could provide.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-audience">11+ preparation</div>
+      <div class="price-name">Young Learner</div>
+      <p class="price-desc">Full 11+ platform for one child. GL Assessment aligned.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num">19</span><span class="price-period">/mo</span></div>
+      <ul class="price-features">
+        <li>All 4 subjects — English, Maths, VR, NVR</li>
+        <li>Ollie AI tutor included</li>
+        <li>Unlimited practice questions</li>
+        <li>Weekly homework assignments</li>
+        <li>Parent progress dashboard</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Start free trial</button>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-badge">Most popular</div>
+      <div class="price-audience">Medical professionals</div>
+      <div class="price-name">All-Access Medical</div>
+      <p class="price-desc">Every medical exam track. Unlimited mocks. AI tutor.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num">89</span><span class="price-period">/mo</span></div>
+      <ul class="price-features">
+        <li>MRCP, SCE, MRCS, PLAB, MSRA</li>
+        <li>Unlimited timed mock exams</li>
+        <li>AI-personalised study plan</li>
+        <li>Concept-first visual teaching</li>
+        <li>Question branching & variants</li>
+        <li>Progress analytics dashboard</li>
+      </ul>
+      <button class="price-btn price-btn-filled">Start free trial</button>
+    </div>
+
+    <div class="price-card">
+      <div class="price-audience">Institutions</div>
+      <div class="price-name">School & Trust</div>
+      <p class="price-desc">For schools, NHS trusts, and deaneries. Volume licensing.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num" style="font-size:36px;letter-spacing:-1px;">Custom</span></div>
+      <ul class="price-features">
+        <li>Unlimited student seats</li>
+        <li>Admin & educator dashboard</li>
+        <li>Cohort analytics & reporting</li>
+        <li>Custom content & branding</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Book a call</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section reveal">
+  <h2>Ready to start?</h2>
+  <p>Join T3 Academy. 7-day free trial. No card required.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-cta-white">Start free trial →</a>
+    <a href="#" class="btn-cta-ghost">See how it works</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">T3 Academy</div>
+  <ul class="footer-links">
+    <li><a href="#">11+ Platform</a></li>
+    <li><a href="#">Medical Exams</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 T3 Academy Ltd · Built in the UK 🇬🇧</div>
+</footer>
+
+<script>
+let currentMode = 'kids';
+
+function setMode(mode){
+  currentMode = mode;
+  const body = document.body;
+  const kidsBtn = document.getElementById('kidsBtn');
+  const medBtn = document.getElementById('medBtn');
+  const pill = document.getElementById('togglePill');
+  const cta = document.getElementById('navCta');
+
+  if(mode === 'med'){
+    body.classList.add('med-mode');
+    kidsBtn.classList.remove('active');
+    medBtn.classList.add('active');
+    // Move pill to med side
+    const medBtnEl = document.getElementById('medBtn');
+    pill.style.transform = `translateX(${medBtnEl.offsetLeft - 4}px)`;
+    pill.style.width = medBtnEl.offsetWidth + 'px';
+    document.getElementById('heroEyebrow').textContent = "The UK's most intelligent medical exam platform";
+    document.getElementById('heroH1').innerHTML = 'No one should<br>fail with our <span class="accent-kids" id="accentWord">content.</span>';
+    document.getElementById('heroSub').textContent = 'MRCP, SCE, MRCS, PLAB, MSRA. Concept-first AI teaching, clinical vignettes, timed mocks and instant results.';
+    document.getElementById('mascotCircle').textContent = '🩺';
+    document.getElementById('mascotName').textContent = 'T3 AI Tutor';
+  } else {
+    body.classList.remove('med-mode');
+    kidsBtn.classList.add('active');
+    medBtn.classList.remove('active');
+    const kidsBtnEl = document.getElementById('kidsBtn');
+    pill.style.transform = 'translateX(0)';
+    pill.style.width = kidsBtnEl.offsetWidth + 'px';
+    document.getElementById('heroEyebrow').textContent = "The UK's most intelligent exam platform";
+    document.getElementById('heroH1').innerHTML = 'Learn smarter.<br>Pass <span class="accent-kids" id="accentWord">every</span> exam.';
+    document.getElementById('heroSub').textContent = 'One platform. Every exam. AI-powered teaching that adapts to how your brain works — then tests you when you\'re ready.';
+    document.getElementById('mascotCircle').textContent = '🦉';
+    document.getElementById('mascotName').textContent = 'Ollie the Owl';
+  }
+}
+
+// Init pill size
+window.addEventListener('load', ()=>{
+  const kidsBtn = document.getElementById('kidsBtn');
+  const pill = document.getElementById('togglePill');
+  pill.style.width = kidsBtn.offsetWidth + 'px';
+  pill.style.height = kidsBtn.offsetHeight + 'px';
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'), i*60);
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+reveals.forEach(r=>observer.observe(r));
+</script>
+</body>
+</html>
