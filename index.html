@@ -3,1099 +3,892 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>T3 Academy — 11+ Learning Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+<title>T3 Academy — Test. Teach. Test.</title>
+<meta name="description" content="The UK's most intelligent exam preparation platform. AI-powered learning for 11+ students and medical professionals. One platform, every exam."/>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── DESIGN TOKENS ── */
 :root{
-  --bg:#f0f4ff;--bg2:#ffffff;--bg3:#f8faff;
-  --border:#e2e8f8;--border2:#c7d2f0;
-  --text:#1e2a4a;--muted:#6b7a9e;--muted2:#9ba8c4;
-  --accent:#6c63ff;--accent2:#5a52e8;--accent-light:#eeeeff;
-  --green:#22c55e;--green-bg:#f0fdf4;--green-border:#bbf7d0;
-  --red:#ef4444;--red-bg:#fef2f2;--red-border:#fecaca;
-  --amber:#f59e0b;--amber-bg:#fffbeb;--amber-border:#fde68a;
-  --blue:#3b82f6;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
-  --pink:#ec4899;--pink-bg:#fdf2f8;
-  --yellow:#fbbf24;
-  --star:#fbbf24;
-  --radius:16px;--radius-sm:10px;
-}
-body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;}
+  /* Neutral base */
+  --ink:#0f0f12;--ink2:#1a1a22;--ink3:#252530;
+  --chalk:#fafaf8;--chalk2:#f2f2ee;--chalk3:#e8e8e2;
+  --muted:#8a8a96;--muted2:#b4b4bc;
+  --border:rgba(0,0,0,0.08);--border-dark:rgba(255,255,255,0.08);
 
-/* ── TOP BAR ── */
-.topbar{
-  background:var(--bg2);border-bottom:2px solid var(--border);
-  padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-}
-.logo{font-weight:900;font-size:20px;color:var(--accent);letter-spacing:-0.5px;}
-.logo span{color:var(--text);}
-.topbar-right{display:flex;align-items:center;gap:16px;}
-.xp-bar-wrap{display:flex;align-items:center;gap:8px;}
-.xp-label{font-size:13px;font-weight:700;color:var(--muted);}
-.xp-track{width:120px;height:10px;background:var(--border);border-radius:100px;overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a78bfa);border-radius:100px;transition:width 0.6s ease;width:34%;}
-.xp-num{font-size:13px;font-weight:800;color:var(--accent);}
-.streak-badge{
-  display:flex;align-items:center;gap:4px;
-  background:var(--amber-bg);border:1.5px solid var(--amber-border);
-  border-radius:100px;padding:4px 12px;
-  font-size:13px;font-weight:800;color:var(--amber);
-}
-.avatar-btn{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--accent-light);border:2px solid var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;cursor:pointer;
+  /* 11+ branch — warm, joyful */
+  --kids-primary:#ff6b35;--kids-secondary:#ffd166;--kids-tertiary:#06d6a0;
+  --kids-bg:#fff8f0;--kids-dark:#2d1b00;
+  --kids-accent:#ff6b35;
+
+  /* Medical branch — dark, premium */
+  --med-primary:#e8ff47;--med-secondary:#a78bfa;--med-bg:#09090b;
+  --med-accent:#e8ff47;--med-dark:#09090b;
+
+  /* Active theme (switches on toggle) */
+  --active-primary:var(--kids-primary);
+  --active-bg:#ffffff;
 }
 
-/* ── HERO GREETING ── */
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  background:var(--chalk);color:var(--ink);
+  font-family:'Instrument Sans',sans-serif;
+  overflow-x:hidden;
+  transition:background 0.6s ease, color 0.6s ease;
+}
+body.med-mode{background:var(--ink);color:var(--chalk);}
+
+/* ── CURSOR ── */
+*, *:hover { cursor: default; }
+a, button, [onclick], label { cursor: pointer !important; }
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;display:flex;align-items:center;padding:0 48px;
+  justify-content:space-between;
+  transition:background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+  background:rgba(250,250,248,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+body.med-mode nav{
+  background:rgba(9,9,11,0.85);
+  border-bottom:1px solid var(--border-dark);
+}
+
+.nav-logo{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:900;font-size:22px;color:var(--ink);
+  text-decoration:none;letter-spacing:-0.5px;
+  display:flex;align-items:center;gap:10px;
+  transition:color 0.4s;
+}
+body.med-mode .nav-logo{color:var(--chalk);}
+.nav-logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--kids-primary);
+  transition:background 0.4s;
+}
+body.med-mode .nav-logo-dot{background:var(--med-primary);}
+
+/* ── BRANCH TOGGLE ── */
+.branch-toggle{
+  display:flex;align-items:center;
+  background:var(--chalk2);border:1.5px solid var(--chalk3);
+  border-radius:100px;padding:4px;
+  transition:background 0.4s, border-color 0.4s;
+  position:relative;
+}
+body.med-mode .branch-toggle{
+  background:var(--ink2);border-color:var(--ink3);
+}
+.toggle-pill{
+  position:absolute;top:4px;left:4px;
+  height:calc(100% - 8px);border-radius:100px;
+  background:white;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), width 0.2s;
+  pointer-events:none;
+}
+body.med-mode .toggle-pill{background:var(--ink3);}
+.branch-btn{
+  position:relative;z-index:1;
+  padding:8px 20px;border-radius:100px;border:none;background:transparent;
+  font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;transition:color 0.25s;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.branch-btn.active{color:var(--ink);}
+body.med-mode .branch-btn.active{color:var(--chalk);}
+
+.nav-actions{display:flex;align-items:center;gap:12px;}
+.btn-login{
+  font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:500;
+  color:var(--muted);background:transparent;border:none;padding:8px 16px;
+  border-radius:8px;text-decoration:none;transition:color 0.2s;
+}
+.btn-login:hover{color:var(--ink);}
+body.med-mode .btn-login:hover{color:var(--chalk);}
+.btn-cta{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;
+  padding:10px 24px;border-radius:100px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:all 0.2s;background:var(--kids-primary);color:white;
+}
+body.med-mode .btn-cta{background:var(--med-primary);color:var(--ink);}
+.btn-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,53,0.3);}
+body.med-mode .btn-cta:hover{box-shadow:0 6px 20px rgba(232,255,71,0.25);}
+
+/* ── HERO ── */
 .hero{
-  padding:32px 32px 0;
-  display:flex;align-items:center;gap:24px;
-  max-width:1100px;margin:0 auto;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 24px 80px;text-align:center;
+  position:relative;overflow:hidden;
 }
-.mascot-wrap{position:relative;flex-shrink:0;}
-.mascot{
+
+/* kids background */
+.hero-bg-kids{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255,209,102,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6,214,160,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 70%);
+  transition:opacity 0.6s ease;
+}
+/* floating shapes kids */
+.shape{position:absolute;border-radius:50%;pointer-events:none;}
+.s1{width:80px;height:80px;background:rgba(255,107,53,0.12);top:15%;left:8%;animation:float1 6s ease-in-out infinite;}
+.s2{width:50px;height:50px;background:rgba(255,209,102,0.2);top:25%;right:10%;animation:float2 8s ease-in-out infinite;}
+.s3{width:120px;height:120px;background:rgba(6,214,160,0.1);bottom:20%;left:5%;animation:float1 7s ease-in-out infinite 1s;}
+.s4{width:40px;height:40px;background:rgba(255,107,53,0.15);bottom:30%;right:8%;animation:float2 5s ease-in-out infinite 0.5s;}
+.s5{width:200px;height:200px;background:rgba(255,209,102,0.06);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 4s ease-in-out infinite;border-radius:50%;}
+@keyframes float1{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(5deg);}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(-4deg);}}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
+
+/* med background */
+.hero-bg-med{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(232,255,71,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 60%, rgba(167,139,250,0.08) 0%, transparent 60%);
+  opacity:0;transition:opacity 0.6s ease;pointer-events:none;
+}
+body.med-mode .hero-bg-med{opacity:1;}
+body.med-mode .hero-bg-kids{opacity:0;}
+body.med-mode .shape{opacity:0;}
+
+/* grid texture med */
+.med-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:48px 48px;
+  opacity:0;transition:opacity 0.6s;pointer-events:none;
+}
+body.med-mode .med-grid{opacity:1;}
+
+/* ── MASCOT ── */
+.hero-mascot{
+  position:relative;z-index:2;margin-bottom:28px;
+  animation:mascotEntrance 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes mascotEntrance{from{opacity:0;transform:scale(0.5) translateY(30px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.mascot-circle{
   width:120px;height:120px;border-radius:50%;
-  background:linear-gradient(135deg,#6c63ff,#a78bfa);
   display:flex;align-items:center;justify-content:center;
-  font-size:56px;
-  box-shadow:0 8px 32px rgba(108,99,255,0.25);
-  animation:mascotBob 3s ease-in-out infinite;
+  font-size:60px;margin:0 auto;
+  box-shadow:0 16px 48px rgba(255,107,53,0.25);
+  background:linear-gradient(135deg,#ff9a5c,#ff6b35);
   border:4px solid white;
+  animation:owlBob 3s ease-in-out infinite;
+  transition:background 0.6s, box-shadow 0.6s;
 }
-@keyframes mascotBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.mascot-status{
-  position:absolute;bottom:6px;right:6px;
-  width:20px;height:20px;border-radius:50%;
-  background:var(--green);border:3px solid white;
+body.med-mode .mascot-circle{
+  background:linear-gradient(135deg,#7c3aed,#a78bfa);
+  box-shadow:0 16px 48px rgba(167,139,250,0.3);
+  border-color:rgba(255,255,255,0.1);
 }
-.speech-bubble{
-  background:white;border:2px solid var(--border);border-radius:20px;border-bottom-left-radius:4px;
-  padding:16px 20px;max-width:460px;position:relative;
-  box-shadow:0 4px 16px rgba(0,0,0,0.06);
+@keyframes owlBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.mascot-name{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;
+  color:var(--kids-primary);letter-spacing:2px;text-transform:uppercase;
+  margin-top:10px;transition:color 0.4s;
 }
-.speech-bubble::before{
-  content:'';position:absolute;left:-14px;bottom:20px;
-  border:7px solid transparent;border-right-color:var(--border);
-}
-.speech-bubble::after{
-  content:'';position:absolute;left:-11px;bottom:21px;
-  border:6px solid transparent;border-right-color:white;
-}
-.bubble-name{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:4px;letter-spacing:0.5px;}
-.bubble-text{font-size:15px;font-weight:600;color:var(--text);line-height:1.5;}
-.bubble-text span{color:var(--accent);}
+body.med-mode .mascot-name{color:var(--med-secondary);}
 
-/* ── MAIN LAYOUT ── */
-.main{max-width:1100px;margin:0 auto;padding:28px 32px 80px;display:grid;grid-template-columns:300px 1fr;gap:24px;}
+/* ── HERO TEXT ── */
+.hero-eyebrow{
+  font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:20px;
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.3s ease both;
+}
+.hero-h1{
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:900;font-size:clamp(48px,7vw,88px);
+  letter-spacing:-3px;line-height:0.95;
+  color:var(--ink);margin-bottom:16px;
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.4s ease both;
+  transition:color 0.4s;
+}
+body.med-mode .hero-h1{color:var(--chalk);}
+.hero-h1 .accent-kids{
+  color:var(--kids-primary);
+  display:inline-block;
+  transition:color 0.4s;
+}
+body.med-mode .hero-h1 .accent-kids{color:var(--med-primary);}
+.hero-sub{
+  font-size:clamp(17px,2vw,21px);color:var(--muted);
+  font-weight:400;max-width:580px;line-height:1.6;
+  margin:0 auto 40px;position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.5s ease both;
+}
 
-/* ── SIDEBAR ── */
-.sidebar{display:flex;flex-direction:column;gap:16px;}
-
-/* ── PROGRESS CARD ── */
-.prog-card{background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);padding:20px;overflow:hidden;position:relative;}
-.prog-card-title{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
-.subject-prog{margin-bottom:12px;}
-.subj-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
-.subj-name{font-size:13px;font-weight:700;color:var(--text);}
-.subj-pct{font-size:12px;font-weight:800;color:var(--muted);}
-.subj-track{height:8px;background:var(--border);border-radius:100px;overflow:hidden;}
-.subj-fill{height:100%;border-radius:100px;transition:width 0.8s ease;}
-.fill-english{background:linear-gradient(90deg,#6c63ff,#a78bfa);}
-.fill-maths{background:linear-gradient(90deg,#3b82f6,#60a5fa);}
-.fill-verbal{background:linear-gradient(90deg,#22c55e,#4ade80);}
-.fill-nvr{background:linear-gradient(90deg,#f59e0b,#fbbf24);}
-
-/* ── ACHIEVEMENT CARD ── */
-.achieve-card{background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);padding:20px;}
-.achieve-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
-.badge-item{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 6px;border-radius:10px;background:var(--bg3);
-  border:1.5px solid var(--border);cursor:pointer;transition:all 0.15s;
+/* ── BRANCH CARDS ── */
+.branch-cards{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:2;margin-bottom:48px;
+  animation:fadeUp 0.6s 0.6s ease both;
 }
-.badge-item:hover{border-color:var(--accent);background:var(--accent-light);}
-.badge-item.locked{opacity:0.35;filter:grayscale(1);}
-.badge-emoji{font-size:22px;}
-.badge-label{font-size:9px;font-weight:700;color:var(--muted);text-align:center;line-height:1.2;}
-
-/* ── TODAY'S PLAN ── */
-.plan-card{background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);padding:20px;}
-.plan-item{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:10px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;
-  border:1.5px solid var(--border);background:var(--bg3);
+.branch-card{
+  background:white;border-radius:24px;
+  border:2px solid var(--chalk3);
+  padding:32px 28px;width:280px;text-align:left;
+  cursor:pointer;transition:all 0.25s;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.06);
 }
-.plan-item:hover{border-color:var(--accent);background:var(--accent-light);}
-.plan-item.done{background:var(--green-bg);border-color:var(--green-border);}
-.plan-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.plan-text{font-size:13px;font-weight:700;color:var(--text);flex:1;}
-.plan-item.done .plan-text{color:var(--green);text-decoration:line-through;}
-.plan-time{font-size:11px;color:var(--muted);font-weight:600;}
-.plan-check{font-size:16px;}
-
-/* ── SUBJECT CARDS GRID ── */
-.subjects-section{display:flex;flex-direction:column;gap:20px;}
-.section-title{font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px;}
-.section-sub{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:16px;}
-.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
-
-/* ── SUBJECT CARD ── */
-.subj-card{
-  background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);
-  padding:24px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+body.med-mode .branch-card{
+  background:var(--ink2);border-color:var(--ink3);
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
 }
-.subj-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(108,99,255,0.12);border-color:var(--accent);}
-.subj-card-icon{font-size:36px;margin-bottom:12px;display:block;}
-.subj-card-name{font-size:18px;font-weight:900;color:var(--text);margin-bottom:4px;}
-.subj-card-desc{font-size:12px;color:var(--muted);font-weight:600;line-height:1.5;margin-bottom:16px;}
-.subj-card-footer{display:flex;align-items:center;justify-content:space-between;}
-.subj-card-btn{
-  font-size:12px;font-weight:800;padding:7px 16px;border-radius:100px;
-  border:none;cursor:pointer;transition:all 0.15s;
+.branch-card:hover{transform:translateY(-6px);}
+.branch-card.kids-card:hover{
+  border-color:var(--kids-primary);
+  box-shadow:0 16px 48px rgba(255,107,53,0.2);
 }
-.subj-card-topics{font-size:11px;color:var(--muted);font-weight:700;}
-.card-accent-english{border-top:4px solid #6c63ff;}
-.card-accent-maths{border-top:4px solid #3b82f6;}
-.card-accent-verbal{border-top:4px solid #22c55e;}
-.card-accent-nvr{border-top:4px solid #f59e0b;}
-.btn-english{background:#6c63ff;color:white;}
-.btn-english:hover{background:#5a52e8;}
-.btn-maths{background:#3b82f6;color:white;}
-.btn-maths:hover{background:#2563eb;}
-.btn-verbal{background:#22c55e;color:white;}
-.btn-verbal:hover{background:#16a34a;}
-.btn-nvr{background:#f59e0b;color:white;}
-.btn-nvr:hover{background:#d97706;}
-
-/* ── TOPIC MODULE VIEW ── */
-.module-view{display:none;flex-direction:column;gap:16px;}
-.module-view.active{display:flex;}
-.back-btn{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:13px;font-weight:800;color:var(--muted);
-  background:white;border:1.5px solid var(--border);border-radius:100px;
-  padding:7px 16px;cursor:pointer;transition:all 0.15s;width:fit-content;
+.branch-card.med-card:hover{
+  border-color:var(--med-primary);
+  box-shadow:0 16px 48px rgba(232,255,71,0.15);
 }
-.back-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-/* ── TOPIC LIST ── */
-.topic-list{display:flex;flex-direction:column;gap:10px;}
-.topic-item{
-  background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius-sm);
-  padding:16px 20px;cursor:pointer;transition:all 0.15s;
-  display:flex;align-items:center;gap:14px;
+.branch-card-stripe{
+  position:absolute;top:0;left:0;right:0;height:4px;border-radius:24px 24px 0 0;
 }
-.topic-item:hover{border-color:var(--accent);background:var(--accent-light);}
-.topic-item.complete{border-color:var(--green-border);background:var(--green-bg);}
-.topic-item.in-progress{border-color:#bfdbfe;background:var(--blue-bg);}
-.topic-icon{font-size:24px;flex-shrink:0;}
-.topic-info{flex:1;}
-.topic-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;}
-.topic-meta{font-size:12px;color:var(--muted);font-weight:600;}
-.topic-status{font-size:11px;font-weight:800;padding:4px 10px;border-radius:100px;}
-.status-complete{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
-.status-progress{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
-.status-new{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
-.topic-stars{color:var(--star);font-size:12px;letter-spacing:1px;}
-
-/* ── QUESTION VIEW ── */
-.question-view{display:none;flex-direction:column;gap:16px;}
-.question-view.active{display:flex;}
-.q-card{background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);padding:28px;}
-.q-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.q-topic-pill{font-size:12px;font-weight:800;padding:5px 14px;border-radius:100px;background:var(--accent-light);color:var(--accent);}
-.q-progress{font-size:12px;font-weight:700;color:var(--muted);}
-.q-timer{font-size:14px;font-weight:800;color:var(--amber);background:var(--amber-bg);padding:4px 12px;border-radius:100px;}
-.q-text{font-size:17px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:8px;}
-.q-passage{
-  background:var(--bg3);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;
-  padding:16px 20px;font-size:14px;color:var(--text);line-height:1.8;
-  font-weight:500;margin-bottom:20px;font-family:'Nunito Sans',sans-serif;
-}
-.q-stem{font-size:16px;font-weight:700;color:var(--text);margin-bottom:20px;}
-.q-options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-.q-option{
-  display:flex;align-items:center;gap:14px;padding:14px 18px;
-  border-radius:12px;border:2px solid var(--border);background:var(--bg3);
-  cursor:pointer;transition:all 0.15s;
-}
-.q-option:hover:not(.disabled){border-color:var(--accent);background:var(--accent-light);}
-.q-option.selected{border-color:var(--accent);background:var(--accent-light);}
-.q-option.correct{border-color:var(--green);background:var(--green-bg);}
-.q-option.wrong{border-color:var(--red);background:var(--red-bg);}
-.q-option.disabled{cursor:default;}
-.opt-letter{
-  width:32px;height:32px;border-radius:8px;flex-shrink:0;
-  background:white;border:2px solid var(--border);
-  font-size:14px;font-weight:900;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;
-  transition:all 0.15s;
-}
-.q-option.selected .opt-letter{background:var(--accent);border-color:var(--accent);color:white;}
-.q-option.correct .opt-letter{background:var(--green);border-color:var(--green);color:white;}
-.q-option.wrong .opt-letter{background:var(--red);border-color:var(--red);color:white;}
-.opt-text{font-size:14px;font-weight:700;color:var(--text);}
-
-/* ── RESULT PANEL ── */
-.result-panel{
-  border-radius:12px;padding:20px;margin-bottom:0;
-  display:none;animation:slideUp 0.3s ease;
-}
-.result-panel.show{display:block;}
-@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.result-correct{background:var(--green-bg);border:2px solid var(--green-border);}
-.result-wrong{background:var(--red-bg);border:2px solid var(--red-border);}
-.result-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.result-icon{font-size:24px;}
-.result-title{font-size:16px;font-weight:900;}
-.result-correct .result-title{color:var(--green);}
-.result-wrong .result-title{color:var(--red);}
-.result-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.7;margin-bottom:12px;}
-.result-tip{
-  background:white;border-radius:8px;padding:12px 14px;
-  font-size:12px;font-weight:700;color:var(--muted);line-height:1.6;
-  border-left:3px solid var(--amber);
-}
-.result-tip strong{color:var(--text);}
-
-/* ── ACTION ROW ── */
-.q-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.btn-check{
-  background:var(--accent);color:white;font-family:'Nunito',sans-serif;
-  font-size:14px;font-weight:800;padding:12px 28px;border-radius:100px;
-  border:none;cursor:pointer;transition:all 0.15s;
-}
-.btn-check:hover{background:var(--accent2);transform:translateY(-1px);}
-.btn-check:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
-.btn-next{
-  background:var(--green);color:white;font-family:'Nunito',sans-serif;
-  font-size:14px;font-weight:800;padding:12px 24px;border-radius:100px;
-  border:none;cursor:pointer;transition:all 0.15s;display:none;
-}
-.btn-next:hover{background:#16a34a;transform:translateY(-1px);}
-.btn-next.show{display:flex;align-items:center;gap:6px;}
-.btn-hint{
-  background:var(--amber-bg);color:var(--amber);font-family:'Nunito',sans-serif;
-  font-size:13px;font-weight:800;padding:12px 20px;border-radius:100px;
-  border:2px solid var(--amber-border);cursor:pointer;transition:all 0.15s;
-}
-.btn-hint:hover{background:var(--amber);color:white;}
-.btn-ask{
-  background:var(--accent-light);color:var(--accent);font-family:'Nunito',sans-serif;
-  font-size:13px;font-weight:800;padding:12px 20px;border-radius:100px;
-  border:2px solid #c4b5fd;cursor:pointer;transition:all 0.15s;
-  display:flex;align-items:center;gap:6px;
-}
-.btn-ask:hover{background:var(--accent);color:white;}
-
-/* ── MASCOT TUTOR PANEL ── */
-.tutor-panel{
-  background:var(--bg2);border-radius:var(--radius);border:2px solid var(--border);
-  overflow:hidden;
-}
-.tutor-header{
-  background:linear-gradient(135deg,#6c63ff,#a78bfa);
-  padding:16px 20px;display:flex;align-items:center;gap:12px;
-}
-.tutor-avatar{font-size:32px;}
-.tutor-name{font-size:15px;font-weight:900;color:white;}
-.tutor-tagline{font-size:11px;color:rgba(255,255,255,0.8);font-weight:600;}
-.tutor-messages{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:120px;}
-.tutor-msg{
-  background:var(--accent-light);border-radius:16px;border-bottom-left-radius:4px;
-  padding:12px 16px;font-size:13px;font-weight:600;color:var(--text);line-height:1.6;
-  max-width:90%;animation:msgPop 0.25s ease;
-}
-@keyframes msgPop{from{opacity:0;transform:scale(0.95);}to{opacity:1;transform:scale(1);}}
-.tutor-msg strong{color:var(--accent);}
-.tutor-msg .emoji{font-size:16px;}
-.tutor-quick{padding:0 16px 16px;display:flex;gap:6px;flex-wrap:wrap;}
-.quick-q{
-  font-size:11px;font-weight:700;padding:6px 12px;border-radius:100px;
-  border:1.5px solid var(--border);background:var(--bg3);color:var(--muted);
-  cursor:pointer;transition:all 0.15s;
-}
-.quick-q:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light);}
-.tutor-input-wrap{padding:12px 16px;border-top:1.5px solid var(--border);display:flex;gap:8px;}
-.tutor-input{
-  flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:100px;
-  padding:9px 16px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);font-weight:600;
-}
-.tutor-input:focus{outline:none;border-color:var(--accent);}
-.tutor-input::placeholder{color:var(--muted2);}
-.tutor-send{
-  width:36px;height:36px;border-radius:50%;background:var(--accent);
-  border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:14px;transition:all 0.15s;
-}
-.tutor-send:hover{background:var(--accent2);}
-
-/* ── HOMEWORK CARD ── */
-.hw-card{background:var(--bg2);border-radius:var(--radius);border:2px solid var(--amber-border);padding:20px;background:var(--amber-bg);}
-.hw-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.hw-title{font-size:15px;font-weight:900;color:var(--text);}
-.hw-badge{font-size:11px;font-weight:800;color:var(--amber);background:white;padding:3px 10px;border-radius:100px;border:1.5px solid var(--amber-border);}
-.hw-item{
-  display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
-  background:white;border-radius:10px;border:1.5px solid var(--amber-border);
+.kids-stripe{background:linear-gradient(90deg,var(--kids-primary),var(--kids-secondary));}
+.med-stripe{background:linear-gradient(90deg,var(--med-primary),var(--med-secondary));}
+.branch-card-icon{font-size:40px;margin-bottom:16px;display:block;}
+.branch-card-label{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
   margin-bottom:8px;
 }
-.hw-checkbox{
-  width:20px;height:20px;border-radius:6px;border:2px solid var(--amber-border);
-  flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all 0.15s;margin-top:1px;
+.kids-label{color:var(--kids-primary);}
+.med-label{color:var(--med-primary);}
+.branch-card-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:22px;
+  color:var(--ink);margin-bottom:8px;letter-spacing:-0.5px;
+  transition:color 0.4s;
 }
-.hw-checkbox.done{background:var(--green);border-color:var(--green);}
-.hw-text{font-size:13px;font-weight:700;color:var(--text);line-height:1.5;}
-.hw-due{font-size:11px;color:var(--muted);margin-top:2px;}
+body.med-mode .branch-card-title{color:var(--chalk);}
+.branch-card-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.branch-card-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;
+  padding:10px 20px;border-radius:100px;border:none;cursor:pointer;
+  transition:all 0.2s;
+}
+.kids-btn{background:var(--kids-primary);color:white;}
+.kids-btn:hover{background:#e85a25;}
+.med-btn{background:var(--med-primary);color:var(--ink);}
+.med-btn:hover{background:var(--med-secondary);color:white;}
+.branch-card-exams{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;
+}
+.exam-tag{
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;
+  background:var(--chalk2);color:var(--muted);
+  transition:background 0.4s;
+}
+body.med-mode .exam-tag{background:var(--ink3);color:var(--muted);}
 
-/* ── CELEBRATION ── */
-.celebration{
-  display:none;position:fixed;inset:0;background:rgba(108,99,255,0.15);
-  backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;
+/* ── SOCIAL PROOF ── */
+.social-proof{
+  display:flex;align-items:center;gap:20px;justify-content:center;
+  font-size:13px;color:var(--muted);
+  position:relative;z-index:2;
+  animation:fadeUp 0.6s 0.7s ease both;
+  flex-wrap:wrap;
 }
-.celebration.show{display:flex;}
-.celebrate-card{
-  background:white;border-radius:24px;padding:40px;text-align:center;
-  max-width:360px;box-shadow:0 24px 64px rgba(0,0,0,0.15);
-  animation:celebPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes celebPop{from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);}}
-.celebrate-emoji{font-size:64px;display:block;margin-bottom:16px;}
-.celebrate-title{font-size:28px;font-weight:900;color:var(--text);margin-bottom:8px;}
-.celebrate-sub{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:24px;}
-.celebrate-xp{font-size:22px;font-weight:900;color:var(--accent);margin-bottom:20px;}
-.btn-celebrate{
-  background:var(--accent);color:white;font-family:'Nunito',sans-serif;
-  font-size:15px;font-weight:800;padding:13px 32px;border-radius:100px;
-  border:none;cursor:pointer;width:100%;
-}
+.proof-item{display:flex;align-items:center;gap:6px;}
+.proof-dot{width:5px;height:5px;border-radius:50%;background:var(--kids-primary);flex-shrink:0;transition:background 0.4s;}
+body.med-mode .proof-dot{background:var(--med-primary);}
 
-/* ── STARS ── */
-.stars-row{display:flex;gap:4px;margin-top:6px;}
-.star{font-size:18px;transition:all 0.2s;}
-.star.filled{color:var(--star);}
-.star.empty{color:#e2e8f8;}
+/* ── HOW IT WORKS ── */
+.section{padding:100px 24px;max-width:1100px;margin:0 auto;}
+.section-eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--kids-primary);margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .section-eyebrow{color:var(--med-primary);}
+.section-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:900;
+  font-size:clamp(32px,4vw,52px);letter-spacing:-1.5px;
+  color:var(--ink);line-height:1.05;margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .section-title{color:var(--chalk);}
+.section-sub{font-size:18px;color:var(--muted);font-weight:400;max-width:520px;line-height:1.6;}
+
+/* T3 steps */
+.t3-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;border-radius:20px;overflow:hidden;border:1px solid var(--chalk3);}
+body.med-mode .t3-steps{border-color:var(--ink3);}
+.t3-step{
+  padding:40px 32px;background:white;position:relative;
+  transition:background 0.4s;
+}
+body.med-mode .t3-step{background:var(--ink2);}
+.t3-step+.t3-step{border-left:1px solid var(--chalk3);}
+body.med-mode .t3-step+.t3-step{border-left-color:var(--ink3);}
+.t3-step:hover{background:var(--chalk2);}
+body.med-mode .t3-step:hover{background:var(--ink3);}
+.step-num{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:80px;font-weight:900;
+  line-height:1;letter-spacing:-3px;
+  color:rgba(255,107,53,0.08);margin-bottom:16px;
+  transition:color 0.4s;
+}
+body.med-mode .step-num{color:rgba(232,255,71,0.06);}
+.step-icon{font-size:32px;margin-bottom:16px;display:block;}
+.step-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:22px;
+  letter-spacing:-0.5px;color:var(--ink);margin-bottom:10px;
+  transition:color 0.4s;
+}
+body.med-mode .step-title{color:var(--chalk);}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.7;}
+.step-highlight{color:var(--kids-primary);font-weight:600;transition:color 0.4s;}
+body.med-mode .step-highlight{color:var(--med-primary);}
+
+/* ── OLLIE SECTION ── */
+.ollie-section{
+  background:linear-gradient(135deg,#fff5f0,#fff8e8);
+  border-radius:28px;padding:64px;margin:0 24px;
+  display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:center;
+  border:1px solid rgba(255,107,53,0.15);
+  transition:all 0.6s;
+}
+body.med-mode .ollie-section{
+  background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(232,255,71,0.04));
+  border-color:rgba(232,255,71,0.1);
+}
+.ollie-left .section-eyebrow{margin-bottom:16px;}
+.ollie-features{display:flex;flex-direction:column;gap:14px;margin-top:28px;}
+.ollie-feature{display:flex;align-items:flex-start;gap:12px;}
+.ollie-feature-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:rgba(255,107,53,0.1);display:flex;align-items:center;
+  justify-content:center;font-size:16px;
+  transition:background 0.4s;
+}
+body.med-mode .ollie-feature-icon{background:rgba(232,255,71,0.08);}
+.ollie-feature-text{font-size:14px;color:var(--muted);line-height:1.6;padding-top:6px;}
+.ollie-feature-text strong{color:var(--ink);transition:color 0.4s;}
+body.med-mode .ollie-feature-text strong{color:var(--chalk);}
+
+/* Ollie chat preview */
+.ollie-chat{
+  background:white;border-radius:20px;padding:20px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.1);
+  border:1px solid var(--chalk3);
+  transition:background 0.4s, border-color 0.4s;
+}
+body.med-mode .ollie-chat{background:var(--ink2);border-color:var(--ink3);box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+.chat-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--chalk3);}
+body.med-mode .chat-header{border-bottom-color:var(--ink3);}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff9a5c,#ff6b35);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+body.med-mode .chat-avatar{background:linear-gradient(135deg,#7c3aed,#a78bfa);}
+.chat-name{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:14px;color:var(--ink);transition:color 0.4s;}
+body.med-mode .chat-name{color:var(--chalk);}
+.chat-status{font-size:11px;color:var(--muted);}
+.chat-messages{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.chat-msg{padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6;max-width:85%;}
+.chat-msg.ollie-msg{
+  background:rgba(255,107,53,0.08);border-bottom-left-radius:4px;
+  color:var(--ink);font-weight:500;
+  transition:background 0.4s, color 0.4s;
+}
+body.med-mode .chat-msg.ollie-msg{background:rgba(167,139,250,0.12);color:var(--chalk);}
+.chat-msg.user-msg{
+  background:var(--kids-primary);color:white;
+  border-bottom-right-radius:4px;align-self:flex-end;
+  transition:background 0.4s;
+}
+body.med-mode .chat-msg.user-msg{background:var(--med-secondary);}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input-fake{
+  flex:1;background:var(--chalk2);border-radius:100px;
+  padding:10px 16px;font-size:13px;color:var(--muted);
+  border:1px solid var(--chalk3);
+  transition:background 0.4s, border-color 0.4s;
+}
+body.med-mode .chat-input-fake{background:var(--ink3);border-color:rgba(255,255,255,0.06);color:var(--muted);}
+.chat-send{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--kids-primary);display:flex;
+  align-items:center;justify-content:center;font-size:14px;color:white;
+  flex-shrink:0;transition:background 0.4s;
+  border:none;
+}
+body.med-mode .chat-send{background:var(--med-primary);color:var(--ink);}
+
+/* ── FEATURES GRID ── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+.feat-card{
+  background:white;border:1px solid var(--chalk3);border-radius:18px;padding:28px;
+  transition:all 0.2s;
+}
+body.med-mode .feat-card{background:var(--ink2);border-color:var(--ink3);}
+.feat-card:hover{transform:translateY(-3px);border-color:var(--kids-primary);}
+body.med-mode .feat-card:hover{border-color:var(--med-primary);}
+.feat-icon{font-size:28px;margin-bottom:14px;}
+.feat-title{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:17px;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px;transition:color 0.4s;}
+body.med-mode .feat-title{color:var(--chalk);}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;align-items:start;}
+.price-card{
+  background:white;border:1.5px solid var(--chalk3);border-radius:20px;padding:32px;
+  position:relative;transition:all 0.2s;
+}
+body.med-mode .price-card{background:var(--ink2);border-color:var(--ink3);}
+.price-card.featured{border-color:var(--kids-primary);}
+body.med-mode .price-card.featured{border-color:var(--med-primary);}
+.price-card:hover{transform:translateY(-3px);}
+.price-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--kids-primary);color:white;
+  font-size:11px;font-weight:700;padding:4px 16px;border-radius:100px;
+  white-space:nowrap;letter-spacing:0.5px;
+  transition:background 0.4s;
+}
+body.med-mode .price-badge{background:var(--med-primary);color:var(--ink);}
+.price-audience{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.price-name{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:20px;color:var(--ink);margin-bottom:6px;letter-spacing:-0.5px;transition:color 0.4s;}
+body.med-mode .price-name{color:var(--chalk);}
+.price-desc{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.price-amount{display:flex;align-items:baseline;gap:3px;margin-bottom:24px;}
+.price-currency{font-size:18px;color:var(--muted);font-weight:500;margin-top:6px;}
+.price-num{font-family:'Cabinet Grotesk',sans-serif;font-size:52px;font-weight:900;color:var(--ink);letter-spacing:-2px;line-height:1;transition:color 0.4s;}
+body.med-mode .price-num{color:var(--chalk);}
+.price-period{font-size:14px;color:var(--muted);}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.price-features li{font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;line-height:1.4;}
+.price-features li::before{
+  content:'✓';font-weight:700;color:var(--kids-primary);flex-shrink:0;
+  transition:color 0.4s;
+}
+body.med-mode .price-features li::before{color:var(--med-primary);}
+.price-btn{
+  width:100%;padding:13px;border-radius:100px;font-family:'Cabinet Grotesk',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;
+}
+.price-btn-outline{background:transparent;border:1.5px solid var(--chalk3);color:var(--ink);transition:all 0.2s;}
+body.med-mode .price-btn-outline{border-color:var(--ink3);color:var(--chalk);}
+.price-btn-outline:hover{border-color:var(--kids-primary);color:var(--kids-primary);}
+body.med-mode .price-btn-outline:hover{border-color:var(--med-primary);color:var(--med-primary);}
+.price-btn-filled{background:var(--kids-primary);color:white;transition:background 0.4s;}
+body.med-mode .price-btn-filled{background:var(--med-primary);color:var(--ink);}
+.price-btn-filled:hover{background:#e85a25;}
+body.med-mode .price-btn-filled:hover{background:var(--med-secondary);color:white;}
+
+/* ── CTA SECTION ── */
+.cta-section{
+  margin:0 24px 80px;border-radius:28px;
+  background:linear-gradient(135deg,var(--kids-primary),#ff9a5c);
+  padding:80px;text-align:center;position:relative;overflow:hidden;
+  transition:all 0.6s;
+}
+body.med-mode .cta-section{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid var(--ink3);}
+.cta-section h2{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(36px,5vw,60px);
+  font-weight:900;letter-spacing:-2px;color:white;line-height:1.05;margin-bottom:16px;
+}
+body.med-mode .cta-section h2{color:var(--chalk);}
+.cta-section p{font-size:18px;color:rgba(255,255,255,0.8);margin-bottom:36px;}
+body.med-mode .cta-section p{color:var(--muted);}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-cta-white{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;
+  padding:14px 32px;border-radius:100px;border:none;cursor:pointer;
+  background:white;color:var(--kids-primary);
+  transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+body.med-mode .btn-cta-white{background:var(--med-primary);color:var(--ink);}
+.btn-cta-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.2);}
+.btn-cta-ghost{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;
+  padding:14px 32px;border-radius:100px;border:2px solid rgba(255,255,255,0.4);
+  cursor:pointer;background:transparent;color:white;
+  transition:all 0.2s;text-decoration:none;
+}
+.btn-cta-ghost:hover{background:rgba(255,255,255,0.1);border-color:white;}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--chalk3);padding:48px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  transition:border-color 0.4s;
+}
+body.med-mode footer{border-top-color:var(--ink3);}
+.footer-logo{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:18px;color:var(--ink);transition:color 0.4s;}
+body.med-mode .footer-logo{color:var(--chalk);}
+.footer-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--ink);}
+body.med-mode .footer-links a:hover{color:var(--chalk);}
+.footer-copy{font-size:12px;color:var(--muted2);}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--chalk3);margin:0 24px;transition:background 0.4s;}
+body.med-mode .divider{background:var(--ink3);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .branch-toggle{display:none;}
+  .t3-steps,.features-grid,.pricing-grid{grid-template-columns:1fr;}
+  .t3-step+.t3-step{border-left:none;border-top:1px solid var(--chalk3);}
+  .ollie-section{grid-template-columns:1fr;padding:36px 24px;}
+  .ollie-chat{display:none;}
+  .cta-section{padding:48px 24px;margin:0 16px 48px;}
+  footer{padding:32px 20px;flex-direction:column;align-items:flex-start;}
+  .section{padding:64px 20px;}
+}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="logo">T3 <span>Academy</span> <span style="font-size:13px;font-weight:700;color:var(--muted);margin-left:4px;">11+</span></div>
-  <div class="topbar-right">
-    <div class="xp-bar-wrap">
-      <div class="xp-label">XP</div>
-      <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
-      <div class="xp-num" id="xpNum">340</div>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    T3 Academy
+  </a>
+
+  <div class="branch-toggle" id="branchToggle">
+    <div class="toggle-pill" id="togglePill"></div>
+    <button class="branch-btn active" id="kidsBtn" onclick="setMode('kids')">
+      🦉 11+ & Schools
+    </button>
+    <button class="branch-btn" id="medBtn" onclick="setMode('med')">
+      🩺 Medical Exams
+    </button>
+  </div>
+
+  <div class="nav-actions">
+    <a href="#" class="btn-login">Sign in</a>
+    <a href="#" class="btn-cta" id="navCta">Start free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg-kids" id="bgKids"></div>
+  <div class="hero-bg-med"></div>
+  <div class="med-grid"></div>
+
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="shape s4"></div>
+  <div class="shape s5"></div>
+
+  <div class="hero-mascot">
+    <div class="mascot-circle" id="mascotCircle">🦉</div>
+    <div class="mascot-name" id="mascotName">Ollie the Owl</div>
+  </div>
+
+  <div class="hero-eyebrow" id="heroEyebrow">The UK's most intelligent exam platform</div>
+
+  <h1 class="hero-h1" id="heroH1">
+    Learn smarter.<br>Pass <span class="accent-kids" id="accentWord">every</span> exam.
+  </h1>
+
+  <p class="hero-sub" id="heroSub">
+    One platform. Every exam. AI-powered teaching that adapts to how your brain works — then tests you when you're ready.
+  </p>
+
+  <div class="branch-cards">
+    <div class="branch-card kids-card" onclick="setMode('kids');document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      <div class="branch-card-stripe kids-stripe"></div>
+      <span class="branch-card-icon">🦉</span>
+      <div class="branch-card-label kids-label">Ages 9–11</div>
+      <div class="branch-card-title">11+ Preparation</div>
+      <div class="branch-card-desc">GL Assessment-aligned. English, Maths, Verbal & Non-Verbal Reasoning. Ollie guides every step.</div>
+      <button class="branch-card-btn kids-btn">Start learning →</button>
+      <div class="branch-card-exams">
+        <span class="exam-tag">GL Assessment</span>
+        <span class="exam-tag">English</span>
+        <span class="exam-tag">Maths</span>
+        <span class="exam-tag">VR</span>
+        <span class="exam-tag">NVR</span>
+      </div>
     </div>
-    <div class="streak-badge">🔥 <span id="streakNum">5</span> day streak</div>
-    <div class="avatar-btn">😊</div>
+
+    <div class="branch-card med-card" onclick="setMode('med');document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+      <div class="branch-card-stripe med-stripe"></div>
+      <span class="branch-card-icon">🩺</span>
+      <div class="branch-card-label med-label">Postgraduate</div>
+      <div class="branch-card-title">Medical Exams</div>
+      <div class="branch-card-desc">MRCP, MRCS, SCE, PLAB, MSRA. Concept-first teaching, clinical vignettes, AI-powered mock exams.</div>
+      <button class="branch-card-btn med-btn">Explore exams →</button>
+      <div class="branch-card-exams">
+        <span class="exam-tag">MRCP</span>
+        <span class="exam-tag">SCE</span>
+        <span class="exam-tag">MRCS</span>
+        <span class="exam-tag">PLAB</span>
+        <span class="exam-tag">MSRA</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="social-proof">
+    <div class="proof-item"><div class="proof-dot"></div>Powered by Claude AI</div>
+    <div class="proof-item"><div class="proof-dot"></div>GL Assessment aligned</div>
+    <div class="proof-item"><div class="proof-dot"></div>7-day free trial</div>
+    <div class="proof-item"><div class="proof-dot"></div>No card required</div>
   </div>
 </div>
 
-<!-- HOME VIEW -->
-<div id="homeView">
-  <!-- HERO GREETING -->
-  <div class="hero">
-    <div class="mascot-wrap">
-      <div class="mascot" id="mascot">🦉</div>
-      <div class="mascot-status"></div>
+<!-- T3 METHOD -->
+<div class="divider"></div>
+<section class="section reveal" id="method">
+  <div class="section-eyebrow">The T3 method</div>
+  <h2 class="section-title">Test. Teach. Test.<br>It actually works.</h2>
+  <p class="section-sub">Built on evidence-based learning science. Not flashcards. Not videos. A complete preparation loop.</p>
+
+  <div class="t3-steps">
+    <div class="t3-step">
+      <div class="step-num">01</div>
+      <span class="step-icon">📊</span>
+      <div class="step-title">Test first</div>
+      <p class="step-desc">Before any teaching, we test. A <span class="step-highlight">baseline assessment</span> reveals exactly where the gaps are — so we don't waste time on what you already know.</p>
     </div>
-    <div class="speech-bubble">
-      <div class="bubble-name">OLLIE THE OWL</div>
-      <div class="bubble-text" id="bubbleText">
-        Welcome back! 🎉 You're on a <span>5-day streak</span> — amazing work! Today let's tackle some <span>Verbal Reasoning</span>. You're so close to unlocking the ⭐ Vocabulary Master badge!
+    <div class="t3-step">
+      <div class="step-num">02</div>
+      <span class="step-icon">🎯</span>
+      <div class="step-title">Targeted teaching</div>
+      <p class="step-desc">AI maps your weaknesses and delivers <span class="step-highlight">concept-first teaching</span> — visual explanations, flowcharts, analogies, ADHD-friendly breakdowns. However your brain learns.</p>
+    </div>
+    <div class="t3-step">
+      <div class="step-num">03</div>
+      <span class="step-icon">✅</span>
+      <div class="step-title">Test again</div>
+      <p class="step-desc">A second test after teaching measures <span class="step-highlight">real improvement</span> — topic by topic. Then branches into new question variants so you can't just memorise answers.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- OLLIE SECTION -->
+<div class="ollie-section reveal" id="features">
+  <div class="ollie-left">
+    <div class="section-eyebrow">Meet your AI tutor</div>
+    <h2 class="section-title" style="font-size:clamp(28px,3.5vw,44px);">Ollie is always<br>inside the question.</h2>
+    <p class="section-sub" style="font-size:16px;">Not a chatbot bolted on the side. Ollie lives inside every question, ready to explain, hint, simplify, or quiz — without pulling you away from the topic.</p>
+
+    <div class="ollie-features">
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">💬</div>
+        <div class="ollie-feature-text"><strong>Explain it differently</strong> — standard, visual map, ADHD mode, analogy, or quiz. You choose how you learn.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">🎯</div>
+        <div class="ollie-feature-text"><strong>Stays on topic</strong> — Ollie keeps you focused. No rabbit holes. Help when stuck, then back to learning.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">🔁</div>
+        <div class="ollie-feature-text"><strong>Generates variants</strong> — same concept, different question. Until you truly understand it, not just remember it.</div>
+      </div>
+      <div class="ollie-feature">
+        <div class="ollie-feature-icon">📈</div>
+        <div class="ollie-feature-text"><strong>Tracks everything</strong> — time spent, accuracy by topic, improvement over sessions. Parents and students both see progress.</div>
       </div>
     </div>
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="main">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-
-      <!-- PROGRESS -->
-      <div class="prog-card">
-        <div class="prog-card-title">My progress</div>
-        <div class="subject-prog">
-          <div class="subj-row"><span class="subj-name">📖 English</span><span class="subj-pct">68%</span></div>
-          <div class="subj-track"><div class="subj-fill fill-english" style="width:68%"></div></div>
-        </div>
-        <div class="subject-prog">
-          <div class="subj-row"><span class="subj-name">🔢 Maths</span><span class="subj-pct">52%</span></div>
-          <div class="subj-track"><div class="subj-fill fill-maths" style="width:52%"></div></div>
-        </div>
-        <div class="subject-prog">
-          <div class="subj-row"><span class="subj-name">💬 Verbal Reasoning</span><span class="subj-pct">41%</span></div>
-          <div class="subj-track"><div class="subj-fill fill-verbal" style="width:41%"></div></div>
-        </div>
-        <div class="subject-prog" style="margin-bottom:0">
-          <div class="subj-row"><span class="subj-name">🔷 Non-Verbal</span><span class="subj-pct">29%</span></div>
-          <div class="subj-track"><div class="subj-fill fill-nvr" style="width:29%"></div></div>
-        </div>
+  <div class="ollie-chat">
+    <div class="chat-header">
+      <div class="chat-avatar">🦉</div>
+      <div>
+        <div class="chat-name">Ollie the Owl</div>
+        <div class="chat-status">Powered by Claude AI · always here</div>
       </div>
-
-      <!-- TODAY'S PLAN -->
-      <div class="plan-card">
-        <div class="prog-card-title">Today's plan</div>
-        <div class="plan-item done">
-          <div class="plan-dot" style="background:var(--green)"></div>
-          <div class="plan-text">English — Comprehension</div>
-          <div class="plan-check">✅</div>
-        </div>
-        <div class="plan-item in-progress" onclick="openSubject('verbal')">
-          <div class="plan-dot" style="background:var(--blue)"></div>
-          <div class="plan-text">Verbal Reasoning — Synonyms</div>
-          <div class="plan-time">15 min</div>
-        </div>
-        <div class="plan-item" onclick="openSubject('maths')">
-          <div class="plan-dot" style="background:var(--muted2)"></div>
-          <div class="plan-text">Maths — Fractions</div>
-          <div class="plan-time">20 min</div>
-        </div>
-        <div class="plan-item" onclick="openSubject('nvr')">
-          <div class="plan-dot" style="background:var(--muted2)"></div>
-          <div class="plan-text">Non-Verbal — Patterns</div>
-          <div class="plan-time">15 min</div>
-        </div>
-      </div>
-
-      <!-- ACHIEVEMENTS -->
-      <div class="achieve-card">
-        <div class="prog-card-title">My badges</div>
-        <div class="achieve-grid">
-          <div class="badge-item" title="Reading Star"><div class="badge-emoji">📚</div><div class="badge-label">Reading Star</div></div>
-          <div class="badge-item" title="Maths Whiz"><div class="badge-emoji">🔢</div><div class="badge-label">Maths Whiz</div></div>
-          <div class="badge-item" title="5-day streak"><div class="badge-emoji">🔥</div><div class="badge-label">On Fire!</div></div>
-          <div class="badge-item locked" title="Locked"><div class="badge-emoji">⭐</div><div class="badge-label">Vocab Master</div></div>
-          <div class="badge-item locked" title="Locked"><div class="badge-emoji">🏆</div><div class="badge-label">Top Score</div></div>
-          <div class="badge-item locked" title="Locked"><div class="badge-emoji">🎯</div><div class="badge-label">Sharpshooter</div></div>
-          <div class="badge-item locked" title="Locked"><div class="badge-emoji">🚀</div><div class="badge-label">Rocket Speed</div></div>
-          <div class="badge-item locked" title="Locked"><div class="badge-emoji">💎</div><div class="badge-label">Diamond</div></div>
-        </div>
-      </div>
-
-    </div><!-- /sidebar -->
-
-    <!-- MAIN CONTENT -->
-    <div class="subjects-section">
-
-      <!-- HOME SUBJECTS -->
-      <div id="subjectsHome">
-        <div class="section-title">Choose a subject 📚</div>
-        <div class="section-sub">Pick where you want to start today, or follow your plan on the left.</div>
-        <div class="subject-grid">
-
-          <div class="subj-card card-accent-english" onclick="openSubject('english')">
-            <span class="subj-card-icon">📖</span>
-            <div class="subj-card-name">English</div>
-            <div class="subj-card-desc">Comprehension passages, vocabulary, grammar and creative writing skills for GL Assessment.</div>
-            <div class="subj-card-footer">
-              <button class="subj-card-btn btn-english">Start →</button>
-              <div class="subj-card-topics">8 topics · 64 questions</div>
-            </div>
-          </div>
-
-          <div class="subj-card card-accent-maths" onclick="openSubject('maths')">
-            <span class="subj-card-icon">🔢</span>
-            <div class="subj-card-name">Maths</div>
-            <div class="subj-card-desc">Number, fractions, algebra, shape, data handling and problem solving — all GL Assessment topics.</div>
-            <div class="subj-card-footer">
-              <button class="subj-card-btn btn-maths">Start →</button>
-              <div class="subj-card-topics">10 topics · 80 questions</div>
-            </div>
-          </div>
-
-          <div class="subj-card card-accent-verbal" onclick="openSubject('verbal')">
-            <span class="subj-card-icon">💬</span>
-            <div class="subj-card-name">Verbal Reasoning</div>
-            <div class="subj-card-desc">Synonyms, antonyms, codes, analogies, word patterns and sequences — built for GL Assessment style.</div>
-            <div class="subj-card-footer">
-              <button class="subj-card-btn btn-verbal">Start →</button>
-              <div class="subj-card-topics">12 topics · 96 questions</div>
-            </div>
-          </div>
-
-          <div class="subj-card card-accent-nvr" onclick="openSubject('nvr')">
-            <span class="subj-card-icon">🔷</span>
-            <div class="subj-card-name">Non-Verbal Reasoning</div>
-            <div class="subj-card-desc">Shapes, patterns, matrices, rotations and sequences — the visual thinking skills GL Assessment tests.</div>
-            <div class="subj-card-footer">
-              <button class="subj-card-btn btn-nvr">Start →</button>
-              <div class="subj-card-topics">9 topics · 72 questions</div>
-            </div>
-          </div>
-
-        </div><!-- /subject-grid -->
-
-        <!-- HOMEWORK -->
-        <div class="hw-card" style="margin-top:20px;">
-          <div class="hw-header">
-            <span style="font-size:22px;">📝</span>
-            <div class="hw-title">This week's homework</div>
-            <div class="hw-badge">3 tasks</div>
-          </div>
-          <div class="hw-item">
-            <div class="hw-checkbox done" onclick="toggleHW(this)"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><div class="hw-text">Complete 10 comprehension questions from the passage about the Amazon rainforest</div><div class="hw-due">✅ Done on Monday</div></div>
-          </div>
-          <div class="hw-item">
-            <div class="hw-checkbox" onclick="toggleHW(this)"></div>
-            <div><div class="hw-text">Practise 15 synonym and antonym questions — focus on difficult vocabulary words</div><div class="hw-due">📅 Due Thursday</div></div>
-          </div>
-          <div class="hw-item">
-            <div class="hw-checkbox" onclick="toggleHW(this)"></div>
-            <div><div class="hw-text">Timed maths test — 20 questions in 25 minutes (fractions and percentages)</div><div class="hw-due">📅 Due Sunday</div></div>
-          </div>
-        </div>
-
-      </div><!-- /subjectsHome -->
-
-      <!-- MODULE VIEW -->
-      <div class="module-view" id="moduleView">
-        <button class="back-btn" onclick="goHome()">← Back to subjects</button>
-        <div class="section-title" id="moduleTitle">Verbal Reasoning Topics</div>
-        <div class="section-sub" id="moduleSub">Work through each topic in order, or jump to where you need the most practice.</div>
-        <div class="topic-list" id="topicList"></div>
-      </div>
-
-      <!-- QUESTION VIEW -->
-      <div class="question-view" id="questionView">
-        <button class="back-btn" onclick="goModule()">← Back to topics</button>
-
-        <div class="q-card">
-          <div class="q-header">
-            <div class="q-topic-pill" id="qTopicPill">Verbal Reasoning — Synonyms</div>
-            <div style="display:flex;gap:10px;align-items:center;">
-              <div class="q-timer" id="qTimer">⏱ 0:00</div>
-              <div class="q-progress" id="qProgress">Q1 of 5</div>
-            </div>
-          </div>
-
-          <div id="passageWrap" style="display:none;">
-            <div class="q-passage" id="qPassage"></div>
-          </div>
-
-          <div class="q-stem" id="qStem"></div>
-          <div class="q-options" id="qOptions"></div>
-
-          <div class="result-panel" id="resultPanel">
-            <div class="result-header">
-              <div class="result-icon" id="resultIcon"></div>
-              <div class="result-title" id="resultTitle"></div>
-            </div>
-            <div class="result-text" id="resultText"></div>
-            <div class="result-tip" id="resultTip"></div>
-          </div>
-
-          <div class="q-actions">
-            <button class="btn-check" id="checkBtn" onclick="checkAnswer()" disabled>Check my answer ✓</button>
-            <button class="btn-next" id="nextBtn" onclick="nextQuestion()">Next question →</button>
-            <button class="btn-hint" onclick="showHint()">💡 Hint</button>
-            <button class="btn-ask" onclick="askOllie()">🦉 Ask Ollie</button>
-          </div>
-        </div>
-
-        <!-- OLLIE TUTOR -->
-        <div class="tutor-panel" id="tutorPanel" style="display:none;">
-          <div class="tutor-header">
-            <div class="tutor-avatar">🦉</div>
-            <div>
-              <div class="tutor-name">Ollie the Owl</div>
-              <div class="tutor-tagline">Your T3 study buddy — powered by Claude AI</div>
-            </div>
-          </div>
-          <div class="tutor-messages" id="tutorMessages"></div>
-          <div class="tutor-quick" id="tutorQuick"></div>
-          <div class="tutor-input-wrap">
-            <input class="tutor-input" id="tutorInput" placeholder="Ask Ollie anything…"
-              onkeydown="if(event.key==='Enter')sendToOllie()"/>
-            <button class="tutor-send" onclick="sendToOllie()">➤</button>
-          </div>
-        </div>
-
-      </div><!-- /question-view -->
-
-    </div><!-- /subjects-section -->
-  </div><!-- /main -->
-</div><!-- /homeView -->
-
-<!-- CELEBRATION OVERLAY -->
-<div class="celebration" id="celebration" onclick="closeCelebration()">
-  <div class="celebrate-card">
-    <span class="celebrate-emoji" id="celebEmoji">🎉</span>
-    <div class="celebrate-title" id="celebTitle">Amazing!</div>
-    <div class="celebrate-sub" id="celebSub">You got all 5 questions right!</div>
-    <div class="celebrate-xp" id="celebXP">+50 XP earned!</div>
-    <button class="btn-celebrate" onclick="closeCelebration()">Keep going! 🚀</button>
+    </div>
+    <div class="chat-messages">
+      <div class="chat-msg ollie-msg">I can see you found that synonym question tricky! Let me explain it a different way 🦉</div>
+      <div class="chat-msg user-msg">Yes please! I don't understand what "ancient" means</div>
+      <div class="chat-msg ollie-msg">Think of a really old castle — so old your great-great-great-grandparents weren't even born yet. That's <strong>ancient</strong>! It means incredibly, incredibly old. ⭐</div>
+      <div class="chat-msg user-msg">Oh! Like the Romans?</div>
+      <div class="chat-msg ollie-msg">Exactly! Ancient Rome, ancient Egypt — perfect examples. Now try the question again — you've got this! 🎉</div>
+    </div>
+    <div class="chat-input-row">
+      <div class="chat-input-fake">Ask Ollie anything…</div>
+      <button class="chat-send">➤</button>
+    </div>
   </div>
 </div>
+
+<!-- FEATURES -->
+<section class="section reveal">
+  <div class="section-eyebrow">Everything included</div>
+  <h2 class="section-title">One subscription.<br>Everything you need.</h2>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">⏱</div><div class="feat-title">Timed mock exams</div><p class="feat-desc">Exam-realistic, timed mocks with instant results, per-question explanations, and performance breakdown.</p></div>
+    <div class="feat-card"><div class="feat-icon">🧠</div><div class="feat-title">AI weakness mapping</div><p class="feat-desc">After every session, your personalised weakness report shows exactly what to focus on next.</p></div>
+    <div class="feat-card"><div class="feat-icon">🗺</div><div class="feat-title">Visual concept maps</div><p class="feat-desc">Topics explained visually — flowcharts, diagrams, and animated breakdowns built into every module.</p></div>
+    <div class="feat-card"><div class="feat-icon">🔁</div><div class="feat-title">Question branching</div><p class="feat-desc">AI generates fresh questions on the same concept. Different vignette, same learning objective. Mastery, not memory.</p></div>
+    <div class="feat-card"><div class="feat-icon">📝</div><div class="feat-title">Homework & assignments</div><p class="feat-desc">Structured weekly homework with deadlines. Parents can track completion. Students earn XP for finishing.</p></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Progress dashboard</div><p class="feat-desc">Live progress tracking across every topic. See where you started, how far you've come, and what's next.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="section reveal">
+  <div class="section-eyebrow">Pricing</div>
+  <h2 class="section-title">Simple, honest pricing.</h2>
+  <p class="section-sub">Less than one tutoring session. More than any tutor could provide.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-audience">11+ preparation</div>
+      <div class="price-name">Young Learner</div>
+      <p class="price-desc">Full 11+ platform for one child. GL Assessment aligned.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num">19</span><span class="price-period">/mo</span></div>
+      <ul class="price-features">
+        <li>All 4 subjects — English, Maths, VR, NVR</li>
+        <li>Ollie AI tutor included</li>
+        <li>Unlimited practice questions</li>
+        <li>Weekly homework assignments</li>
+        <li>Parent progress dashboard</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Start free trial</button>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-badge">Most popular</div>
+      <div class="price-audience">Medical professionals</div>
+      <div class="price-name">All-Access Medical</div>
+      <p class="price-desc">Every medical exam track. Unlimited mocks. AI tutor.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num">89</span><span class="price-period">/mo</span></div>
+      <ul class="price-features">
+        <li>MRCP, SCE, MRCS, PLAB, MSRA</li>
+        <li>Unlimited timed mock exams</li>
+        <li>AI-personalised study plan</li>
+        <li>Concept-first visual teaching</li>
+        <li>Question branching & variants</li>
+        <li>Progress analytics dashboard</li>
+      </ul>
+      <button class="price-btn price-btn-filled">Start free trial</button>
+    </div>
+
+    <div class="price-card">
+      <div class="price-audience">Institutions</div>
+      <div class="price-name">School & Trust</div>
+      <p class="price-desc">For schools, NHS trusts, and deaneries. Volume licensing.</p>
+      <div class="price-amount"><span class="price-currency">£</span><span class="price-num" style="font-size:36px;letter-spacing:-1px;">Custom</span></div>
+      <ul class="price-features">
+        <li>Unlimited student seats</li>
+        <li>Admin & educator dashboard</li>
+        <li>Cohort analytics & reporting</li>
+        <li>Custom content & branding</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Book a call</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section reveal">
+  <h2>Ready to start?</h2>
+  <p>Join T3 Academy. 7-day free trial. No card required.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-cta-white">Start free trial →</a>
+    <a href="#" class="btn-cta-ghost">See how it works</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">T3 Academy</div>
+  <ul class="footer-links">
+    <li><a href="#">11+ Platform</a></li>
+    <li><a href="#">Medical Exams</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 T3 Academy Ltd · Built in the UK 🇬🇧</div>
+</footer>
 
 <script>
-// ── DATA ──
-const subjects = {
-  english: {
-    name:'English', icon:'📖', color:'#6c63ff',
-    topics:[
-      {name:'Reading comprehension',icon:'📄',questions:8,done:true,stars:3},
-      {name:'Vocabulary & synonyms',icon:'📝',questions:8,inProgress:true,stars:2},
-      {name:'Grammar & punctuation',icon:'✏️',questions:8,stars:0},
-      {name:'Inference & deduction',icon:'🔍',questions:8,stars:0},
-      {name:'Author\'s purpose & tone',icon:'🎭',questions:8,stars:0},
-      {name:'Creative writing techniques',icon:'✨',questions:8,stars:0},
-    ]
-  },
-  maths: {
-    name:'Maths', icon:'🔢', color:'#3b82f6',
-    topics:[
-      {name:'Number & place value',icon:'🔢',questions:8,done:true,stars:3},
-      {name:'Fractions & decimals',icon:'½',questions:8,inProgress:true,stars:1},
-      {name:'Percentages & ratio',icon:'%',questions:8,stars:0},
-      {name:'Algebra & sequences',icon:'x²',questions:8,stars:0},
-      {name:'Shape & geometry',icon:'📐',questions:8,stars:0},
-      {name:'Data & graphs',icon:'📊',questions:8,stars:0},
-      {name:'Time & measurement',icon:'⏱',questions:8,stars:0},
-      {name:'Word problems',icon:'💭',questions:8,stars:0},
-    ]
-  },
-  verbal: {
-    name:'Verbal Reasoning', icon:'💬', color:'#22c55e',
-    topics:[
-      {name:'Synonyms',icon:'🔤',questions:8,inProgress:true,stars:2},
-      {name:'Antonyms',icon:'↔️',questions:8,stars:0},
-      {name:'Word analogies',icon:'🔗',questions:8,stars:0},
-      {name:'Letter codes',icon:'🔡',questions:8,stars:0},
-      {name:'Number codes',icon:'🔢',questions:8,stars:0},
-      {name:'Hidden words',icon:'🔍',questions:8,stars:0},
-      {name:'Word connections',icon:'🕸',questions:8,stars:0},
-      {name:'Sequences',icon:'📈',questions:8,stars:0},
-    ]
-  },
-  nvr: {
-    name:'Non-Verbal Reasoning', icon:'🔷', color:'#f59e0b',
-    topics:[
-      {name:'Shape patterns',icon:'🔷',questions:8,stars:0},
-      {name:'Matrices',icon:'⬛',questions:8,stars:0},
-      {name:'Rotations & reflections',icon:'🔄',questions:8,stars:0},
-      {name:'Odd one out',icon:'❌',questions:8,stars:0},
-      {name:'Codes & symbols',icon:'🔣',questions:8,stars:0},
-      {name:'Nets & 3D shapes',icon:'📦',questions:8,stars:0},
-    ]
-  }
-};
+let currentMode = 'kids';
 
-// ── QUESTION BANKS ──
-const questionBanks = {
-  'Synonyms': [
-    {
-      stem:'Which word is closest in meaning to ANCIENT?',
-      options:['Modern','Old','Broken','Tiny'],
-      correct:1,
-      explanation:'ANCIENT means very old — something that existed long ago. "Modern" is the opposite. "Broken" and "Tiny" relate to condition and size, not age.',
-      tip:'For synonyms, think about the core meaning of the word. Ancient = very, very old.',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to FURIOUS?',
-      options:['Happy','Scared','Very angry','Tired'],
-      correct:2,
-      explanation:'FURIOUS means extremely angry — much stronger than just "annoyed". It comes from the same root as "fury".',
-      tip:'Furious = extremely angry. Remember: fury → furious!',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to TRANSPARENT?',
-      options:['Colourful','See-through','Solid','Rough'],
-      correct:1,
-      explanation:'TRANSPARENT means you can see through it — like glass or clear water. Think of a transparent plastic bag.',
-      tip:'Trans = through + parent (appears) → you can see through it!',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to ENORMOUS?',
-      options:['Tiny','Loud','Huge','Sharp'],
-      correct:2,
-      explanation:'ENORMOUS means extremely large or huge. "Tiny" is the opposite. The other options relate to sound and sharpness.',
-      tip:'Enormous sounds big — and it is! Think of an enormous elephant. 🐘',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to SWIFT?',
-      options:['Heavy','Fast','Quiet','Cold'],
-      correct:1,
-      explanation:'SWIFT means moving quickly — fast. A swift river flows rapidly. A swift is also a bird known for flying fast!',
-      tip:'Swift = fast. A swift runner, a swift river, a swift decision.',
-      xp:15
-    }
-  ],
-  'Fractions & decimals': [
-    {
-      stem:'What is ¾ + ⅛?',
-      options:['4/12','7/8','8/8','5/8'],
-      correct:1,
-      explanation:'Convert ¾ to eighths: ¾ = 6/8. Then 6/8 + 1/8 = 7/8. Always find a common denominator first!',
-      tip:'To add fractions: make the bottom numbers the same first (common denominator).',
-      xp:15
-    },
-    {
-      stem:'What is 0.6 as a fraction in its simplest form?',
-      options:['6/100','3/5','6/10','1/6'],
-      correct:1,
-      explanation:'0.6 = 6/10. Simplify by dividing top and bottom by 2: 6÷2 = 3, 10÷2 = 5. So 0.6 = 3/5.',
-      tip:'Decimal to fraction: put the digits over 10 (or 100), then simplify.',
-      xp:15
-    },
-    {
-      stem:'Which fraction is bigger: 2/3 or 3/5?',
-      options:['2/3','3/5','They are equal','Cannot tell'],
-      correct:0,
-      explanation:'Convert to the same denominator: 2/3 = 10/15 and 3/5 = 9/15. So 2/3 (= 10/15) is bigger than 3/5 (= 9/15).',
-      tip:'To compare fractions, convert to the same denominator and compare the tops.',
-      xp:20
-    }
-  ],
-  'Reading comprehension': [
-    {
-      passage:'The blue whale is the largest animal ever known to have lived on Earth. These magnificent creatures can reach lengths of up to 30 metres and weigh as much as 200 tonnes. Despite their enormous size, blue whales feed almost exclusively on tiny shrimp-like creatures called krill. A single blue whale can consume up to 40 million krill per day during summer feeding seasons.',
-      stem:'According to the passage, what do blue whales mainly eat?',
-      options:['Fish','Krill','Squid','Plankton'],
-      correct:1,
-      explanation:'The passage clearly states blue whales feed "almost exclusively on tiny shrimp-like creatures called krill." The key word is "exclusively" — meaning mainly or only.',
-      tip:'For comprehension questions, look for key words in the question, then scan the passage to find where those words appear.',
-      xp:10
-    },
-    {
-      passage:'The blue whale is the largest animal ever known to have lived on Earth. These magnificent creatures can reach lengths of up to 30 metres and weigh as much as 200 tonnes. Despite their enormous size, blue whales feed almost exclusively on tiny shrimp-like creatures called krill. A single blue whale can consume up to 40 million krill per day during summer feeding seasons.',
-      stem:'What does the word "magnificent" most likely mean in this passage?',
-      options:['Dangerous','Impressive and wonderful','Difficult to spot','Very fast'],
-      correct:1,
-      explanation:'"Magnificent" is a positive describing word (adjective) meaning impressively beautiful or wonderful. The passage uses it to describe blue whales in an admiring way.',
-      tip:'When a comprehension asks about a word\'s meaning, look at the words around it for clues (context clues).',
-      xp:15
-    }
-  ]
-};
+function setMode(mode){
+  currentMode = mode;
+  const body = document.body;
+  const kidsBtn = document.getElementById('kidsBtn');
+  const medBtn = document.getElementById('medBtn');
+  const pill = document.getElementById('togglePill');
+  const cta = document.getElementById('navCta');
 
-// ── STATE ──
-let currentSubject = null;
-let currentTopic = null;
-let currentQBank = [];
-let currentQIdx = 0;
-let selectedOpt = null;
-let revealed = false;
-let qTimerSecs = 0;
-let qTimerInterval = null;
-let xp = 340;
-let tutorOpen = false;
-let ollieTyping = false;
-let correctCount = 0;
-
-// ── NAVIGATION ──
-function openSubject(subj){
-  currentSubject = subj;
-  const data = subjects[subj];
-  document.getElementById('moduleTitle').textContent = data.name + ' — Topics';
-  document.getElementById('moduleSub').textContent = 'Work through each topic. Click to start learning and practising.';
-  renderTopics(data);
-  document.getElementById('subjectsHome').style.display = 'none';
-  document.getElementById('moduleView').classList.add('active');
-  document.getElementById('questionView').classList.remove('active');
-  updateBubble(`Let's do some ${data.name}! 📚 You've got this. Pick a topic to start.`);
-}
-
-function renderTopics(data){
-  const list = document.getElementById('topicList');
-  list.innerHTML = '';
-  data.topics.forEach(t=>{
-    const div = document.createElement('div');
-    div.className = 'topic-item' + (t.done?' complete':t.inProgress?' in-progress':'');
-    const starsHTML = t.done ? '★★★' : t.inProgress ? '★★☆' : t.stars ? '★☆☆' : '';
-    const statusText = t.done ? 'Complete' : t.inProgress ? 'In progress' : 'Not started';
-    const statusClass = t.done ? 'status-complete' : t.inProgress ? 'status-progress' : 'status-new';
-    div.innerHTML = `
-      <div class="topic-icon">${t.icon}</div>
-      <div class="topic-info">
-        <div class="topic-name">${t.name}</div>
-        <div class="topic-meta">${t.questions} questions ${starsHTML ? '· <span style="color:var(--star)">'+starsHTML+'</span>' : ''}</div>
-      </div>
-      <span class="topic-status ${statusClass}">${statusText}</span>
-    `;
-    div.onclick = ()=>openTopic(t.name);
-    list.appendChild(div);
-  });
-}
-
-function openTopic(topicName){
-  currentTopic = topicName;
-  currentQBank = questionBanks[topicName] || getDefaultQuestions(topicName);
-  currentQIdx = 0; correctCount = 0;
-  document.getElementById('moduleView').classList.remove('active');
-  document.getElementById('questionView').classList.add('active');
-  document.getElementById('qTopicPill').textContent = subjects[currentSubject].name + ' — ' + topicName;
-  document.getElementById('tutorPanel').style.display = 'none';
-  tutorOpen = false;
-  loadQuestion();
-  updateBubble(`Great choice! Let's practise ${topicName}. Take your time and read each question carefully. 🎯`);
-}
-
-function getDefaultQuestions(topic){
-  return [
-    {stem:`This is a practice question for "${topic}". In the full platform, this topic will have 8 carefully crafted questions — all GL Assessment style.`,options:['Option A','Option B','Option C','Option D'],correct:1,explanation:`For "${topic}", the key idea is to carefully read the question and eliminate options you know are wrong. This approach works across all question types.`,tip:`Tip: For ${topic} questions, always read all options before choosing.`,xp:10}
-  ];
-}
-
-function goHome(){
-  document.getElementById('subjectsHome').style.display = '';
-  document.getElementById('moduleView').classList.remove('active');
-  document.getElementById('questionView').classList.remove('active');
-  stopTimer();
-  updateBubble("Great work! 🌟 Which subject would you like to try next?");
-}
-
-function goModule(){
-  document.getElementById('moduleView').classList.add('active');
-  document.getElementById('questionView').classList.remove('active');
-  stopTimer();
-}
-
-// ── QUESTION ENGINE ──
-function loadQuestion(){
-  const q = currentQBank[currentQIdx];
-  if(!q) return showSessionComplete();
-  selectedOpt = null; revealed = false;
-  stopTimer(); startTimer();
-
-  document.getElementById('qProgress').textContent = `Q${currentQIdx+1} of ${currentQBank.length}`;
-  document.getElementById('qStem').textContent = q.stem;
-  document.getElementById('resultPanel').className = 'result-panel';
-  document.getElementById('checkBtn').style.display = '';
-  document.getElementById('checkBtn').disabled = true;
-  document.getElementById('nextBtn').className = 'btn-next';
-
-  const passWrap = document.getElementById('passageWrap');
-  if(q.passage){passWrap.style.display='';document.getElementById('qPassage').textContent = q.passage;}
-  else{passWrap.style.display='none';}
-
-  const opts = document.getElementById('qOptions');
-  opts.innerHTML = '';
-  const letters = ['A','B','C','D','E'];
-  q.options.forEach((o,i)=>{
-    const d = document.createElement('div');
-    d.className = 'q-option';
-    d.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${o}</div>`;
-    d.onclick = ()=>selectOpt(d, i);
-    opts.appendChild(d);
-  });
-}
-
-function selectOpt(el, idx){
-  if(revealed) return;
-  document.querySelectorAll('.q-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedOpt = idx;
-  document.getElementById('checkBtn').disabled = false;
-}
-
-function checkAnswer(){
-  if(selectedOpt===null||revealed) return;
-  revealed = true; stopTimer();
-  const q = currentQBank[currentQIdx];
-  const opts = document.querySelectorAll('.q-option');
-  opts.forEach((o,i)=>{
-    o.classList.add('disabled');
-    if(i===q.correct) o.classList.add('correct');
-    else if(i===selectedOpt) o.classList.add('wrong');
-  });
-  const correct = selectedOpt===q.correct;
-  if(correct){ correctCount++; addXP(q.xp||10); }
-
-  const panel = document.getElementById('resultPanel');
-  panel.className = 'result-panel show ' + (correct?'result-correct':'result-wrong');
-  document.getElementById('resultIcon').textContent = correct?'🎉':'😅';
-  document.getElementById('resultTitle').textContent = correct?'Brilliant! Well done!':'Not quite — let\'s learn from this!';
-  document.getElementById('resultText').textContent = q.explanation;
-  document.getElementById('resultTip').innerHTML = '<strong>📌 Exam tip:</strong> ' + q.tip;
-
-  document.getElementById('checkBtn').style.display='none';
-  document.getElementById('nextBtn').className='btn-next show';
-
-  updateBubble(correct
-    ? `Yes! ⭐ That's correct! ${q.tip}`
-    : `Don't worry — you're learning! The answer was ${['A','B','C','D','E'][q.correct]}. ${q.tip}`
-  );
-}
-
-function nextQuestion(){
-  currentQIdx++;
-  if(currentQIdx>=currentQBank.length) showSessionComplete();
-  else loadQuestion();
-}
-
-function showSessionComplete(){
-  stopTimer();
-  const total = currentQBank.length;
-  const pct = Math.round((correctCount/total)*100);
-  let emoji='🎉', title='Session complete!', sub=`You got ${correctCount} out of ${total} right (${pct}%)`;
-  if(pct===100){emoji='🏆';title='Perfect score!';}
-  else if(pct>=80){emoji='⭐';title='Excellent work!';}
-  else if(pct>=60){emoji='😊';title='Good effort!';}
-  else{emoji='💪';title='Keep practising!';}
-  document.getElementById('celebEmoji').textContent=emoji;
-  document.getElementById('celebTitle').textContent=title;
-  document.getElementById('celebSub').textContent=sub;
-  document.getElementById('celebXP').textContent=`+${correctCount*10} XP earned!`;
-  document.getElementById('celebration').classList.add('show');
-}
-
-function closeCelebration(){
-  document.getElementById('celebration').classList.remove('show');
-  goModule();
-}
-
-// ── TIMER ──
-function startTimer(){
-  qTimerSecs=0;
-  qTimerInterval=setInterval(()=>{
-    qTimerSecs++;
-    const m=Math.floor(qTimerSecs/60);
-    const s=qTimerSecs%60;
-    document.getElementById('qTimer').textContent=`⏱ ${m}:${String(s).padStart(2,'0')}`;
-  },1000);
-}
-function stopTimer(){clearInterval(qTimerInterval);}
-
-// ── XP ──
-function addXP(amount){
-  xp+=amount;
-  document.getElementById('xpNum').textContent=xp;
-  const fill=Math.min(((xp%100)/100)*100,100);
-  document.getElementById('xpFill').style.width=fill+'%';
-}
-
-// ── HINT ──
-function showHint(){
-  if(!currentQBank[currentQIdx]) return;
-  const q=currentQBank[currentQIdx];
-  askOllie();
-  setTimeout(()=>{
-    addOllieMsg(`💡 <strong>Hint!</strong> For this question, try to eliminate options you know are wrong first. ${q.tip}`);
-    setQuickQs(['Tell me more','Give another hint','Show me the answer trick']);
-  },400);
-}
-
-// ── OLLIE TUTOR ──
-function askOllie(){
-  if(!tutorOpen){
-    tutorOpen=true;
-    const panel=document.getElementById('tutorPanel');
-    panel.style.display='block';
-    const msgs=document.getElementById('tutorMessages');
-    msgs.innerHTML='';
-    addOllieMsg(`Hoot hoot! 🦉 I'm <strong>Ollie</strong>, your T3 study buddy! I'm here to help you understand, not just remember. What would you like to know?`);
-    setQuickQs(['Explain this to me simply','Give me a hint','How do I work this type out?','Show me a trick']);
-  }
-}
-
-function addOllieMsg(html){
-  const msgs=document.getElementById('tutorMessages');
-  const div=document.createElement('div');
-  div.className='tutor-msg';
-  div.innerHTML=html;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
-}
-
-function setQuickQs(questions){
-  const wrap=document.getElementById('tutorQuick');
-  wrap.innerHTML='';
-  questions.forEach(q=>{
-    const btn=document.createElement('button');
-    btn.className='quick-q';
-    btn.textContent=q;
-    btn.onclick=()=>quickAskOllie(q);
-    wrap.appendChild(btn);
-  });
-}
-
-function quickAskOllie(text){
-  document.getElementById('tutorQuick').innerHTML='';
-  respondAsOllie(text);
-}
-
-function sendToOllie(){
-  const inp=document.getElementById('tutorInput');
-  const text=inp.value.trim();
-  if(!text||ollieTyping) return;
-  inp.value='';
-  respondAsOllie(text);
-}
-
-function respondAsOllie(userText){
-  if(ollieTyping) return;
-  ollieTyping=true;
-  document.getElementById('aiStatus') && (document.getElementById('aiStatus').textContent='Ollie is thinking…');
-
-  const q=currentQBank[currentQIdx];
-  const context = q ? `The student is currently on this question:
-Topic: ${currentTopic}
-Question: ${q.stem}
-Options: ${q.options.map((o,i)=>['A','B','C','D'][i]+') '+o).join(', ')}
-Correct answer: ${['A','B','C','D'][q.correct]}
-Explanation: ${q.explanation}
-Exam tip: ${q.tip}` : `The student is browsing the ${currentSubject||'11+'} section.`;
-
-  const messages = [{
-    role:'user',
-    content: `${context}\n\nStudent says: ${userText}`
-  }];
-
-  fetch('/api/chat', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ messages, systemPrompt: `You are Ollie the Owl 🦉, a warm, encouraging AI tutor on T3 Academy helping children aged 9-11 prepare for the 11+ GL Assessment exam.
-Your personality: friendly, patient, enthusiastic, uses simple language and fun analogies. Use emojis occasionally.
-Rules:
-- Never give away the answer directly — guide them to understand the concept
-- Keep responses short (3-5 sentences max) and age-appropriate
-- Always end with encouragement or a follow-up question
-- If they're stuck, give a hint not the answer
-- Use the question context provided to give relevant, specific help` })
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    addOllieMsg(data.reply || '🦉 Hmm, let me think about that differently… Can you tell me what part is confusing you?');
-    setQuickQs(['Tell me more','Give me a hint','Explain differently','I understand now! ✓']);
-    ollieTyping=false;
-  })
-  .catch(()=>{
-    addOllieMsg('🦉 Oops, I had a little hiccup! Try asking me again — I\'m here to help!');
-    ollieTyping=false;
-  });
-}
-
-// ── BUBBLE ──
-function updateBubble(text){
-  document.getElementById('bubbleText').innerHTML=text;
-}
-
-// ── HOMEWORK ──
-function toggleHW(el){
-  el.classList.toggle('done');
-  if(el.classList.contains('done')){
-    el.innerHTML='<svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    addXP(20);
+  if(mode === 'med'){
+    body.classList.add('med-mode');
+    kidsBtn.classList.remove('active');
+    medBtn.classList.add('active');
+    // Move pill to med side
+    const medBtnEl = document.getElementById('medBtn');
+    pill.style.transform = `translateX(${medBtnEl.offsetLeft - 4}px)`;
+    pill.style.width = medBtnEl.offsetWidth + 'px';
+    document.getElementById('heroEyebrow').textContent = "The UK's most intelligent medical exam platform";
+    document.getElementById('heroH1').innerHTML = 'No one should<br>fail with our <span class="accent-kids" id="accentWord">content.</span>';
+    document.getElementById('heroSub').textContent = 'MRCP, SCE, MRCS, PLAB, MSRA. Concept-first AI teaching, clinical vignettes, timed mocks and instant results.';
+    document.getElementById('mascotCircle').textContent = '🩺';
+    document.getElementById('mascotName').textContent = 'T3 AI Tutor';
   } else {
-    el.innerHTML='';
-    xp=Math.max(0,xp-20);
-    document.getElementById('xpNum').textContent=xp;
+    body.classList.remove('med-mode');
+    kidsBtn.classList.add('active');
+    medBtn.classList.remove('active');
+    const kidsBtnEl = document.getElementById('kidsBtn');
+    pill.style.transform = 'translateX(0)';
+    pill.style.width = kidsBtnEl.offsetWidth + 'px';
+    document.getElementById('heroEyebrow').textContent = "The UK's most intelligent exam platform";
+    document.getElementById('heroH1').innerHTML = 'Learn smarter.<br>Pass <span class="accent-kids" id="accentWord">every</span> exam.';
+    document.getElementById('heroSub').textContent = 'One platform. Every exam. AI-powered teaching that adapts to how your brain works — then tests you when you\'re ready.';
+    document.getElementById('mascotCircle').textContent = '🦉';
+    document.getElementById('mascotName').textContent = 'Ollie the Owl';
   }
 }
+
+// Init pill size
+window.addEventListener('load', ()=>{
+  const kidsBtn = document.getElementById('kidsBtn');
+  const pill = document.getElementById('togglePill');
+  pill.style.width = kidsBtn.offsetWidth + 'px';
+  pill.style.height = kidsBtn.offsetHeight + 'px';
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'), i*60);
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+reveals.forEach(r=>observer.observe(r));
 </script>
 </body>
 </html>
