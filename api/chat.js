@@ -9,6 +9,10 @@ export default async function handler(req, res) {
   try {
     const { messages, systemPrompt } = req.body;
 
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return res.status(500).json({ reply: '🦉 Ollie is not set up yet — the API key is missing from Vercel settings.' });
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -17,16 +21,9 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        system: systemPrompt || `You are Ollie the Owl, a friendly, encouraging AI tutor on T3 Academy. 
-You help students prepare for the 11+ exam (GL Assessment) covering English, Maths, Verbal Reasoning and Non-Verbal Reasoning.
-You also help medical professionals prepare for MRCP, SCE, MRCS, PLAB and MSRA exams.
-Keep responses concise, warm and age-appropriate for the audience.
-For 11+ students (ages 9-11): use simple language, encouragement, fun analogies and emojis.
-For medical professionals: be clinical, precise and exam-focused.
-Never give away answers directly — guide the student to understand the concept.
-Always end with encouragement.`,
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: systemPrompt || `You are Ollie the Owl, a warm friendly AI tutor helping children aged 9-11 prepare for the 11+ GL Assessment exam. Be encouraging, use simple language, never give away answers directly — guide understanding instead. Keep responses to 3-4 sentences max.`,
         messages: messages
       })
     });
@@ -34,14 +31,14 @@ Always end with encouragement.`,
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || 'API error' });
+      console.error('Anthropic error:', JSON.stringify(data));
+      return res.status(200).json({ reply: '🦉 I had a little hiccup! Try asking me again.' });
     }
 
-    return res.status(200).json({
-      reply: data.content[0].text
-    });
+    return res.status(200).json({ reply: data.content[0].text });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    console.error('Error:', error.message);
+    return res.status(200).json({ reply: '🦉 Oops, something went wrong. Try again in a moment!' });
   }
 }
