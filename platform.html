@@ -50,6 +50,18 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
   font-size:18px;cursor:pointer;
 }
 
+/* ── TOPBAR NAV ── */
+.topbar-nav{display:flex;align-items:center;gap:4px;}
+.nav-link{
+  padding:7px 14px;border-radius:10px;font-size:13px;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:all 0.15s;
+  text-decoration:none;white-space:nowrap;
+}
+.nav-link:hover{background:var(--accent-light);color:var(--accent);}
+.nav-link.active{background:var(--accent-light);color:var(--accent);}
+.welcome-text{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;}
+
+
 /* ── HERO GREETING ── */
 .hero{
   padding:32px 32px 0;
@@ -386,15 +398,66 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="logo">T3 <span>Academy</span> <span style="font-size:13px;font-weight:700;color:var(--muted);margin-left:4px;">11+</span></div>
+  <div class="logo" onclick="goHome()" style="cursor:pointer;">T3 <span>Academy</span> <span style="font-size:13px;font-weight:700;color:var(--muted);margin-left:4px;">11+</span></div>
+  <nav class="topbar-nav">
+    <a class="nav-link" onclick="goHome()">🏠 Home</a>
+    <a class="nav-link" onclick="openMockExam()">📝 Mock Exam</a>
+    <a class="nav-link" onclick="openProgressView()">📊 My Progress</a>
+    <a class="nav-link" id="parentDashLink" onclick="openParentDashboard()" style="display:none;">👨‍👩‍👧 Parent View</a>
+  </nav>
   <div class="topbar-right">
     <div class="xp-bar-wrap">
       <div class="xp-label">XP</div>
       <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
-      <div class="xp-num" id="xpNum">340</div>
+      <div class="xp-num" id="xpNum">0</div>
     </div>
-    <div class="streak-badge">🔥 <span id="streakNum">5</span> day streak</div>
-    <div class="avatar-btn">😊</div>
+    <div class="streak-badge">🔥 <span id="streakNum">0</span> day streak</div>
+    <span class="welcome-text" style="font-size:13px;font-weight:700;color:var(--muted);">Hello, <strong id="userName" style="color:var(--text);">there</strong>!</span>
+    <div class="avatar-wrap" style="position:relative;">
+      <div class="avatar-btn" id="userAvatar" onclick="toggleProfileMenu()" style="cursor:pointer;user-select:none;">😊</div>
+      <div id="profileMenu" style="display:none;position:absolute;right:0;top:48px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:200;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="font-size:32px;" id="menuAvatar">😊</div>
+          <div>
+            <div style="font-weight:800;color:var(--text);font-size:14px;" id="menuName">My Account</div>
+            <div style="font-size:12px;color:var(--muted);" id="menuEmail"></div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);margin:8px 0;padding-top:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Choose your emoji</div>
+          <div id="emojiPicker" style="display:flex;flex-wrap:wrap;gap:6px;font-size:20px;cursor:pointer;">
+            <span onclick="setAvatar(this)">🦉</span><span onclick="setAvatar(this)">🐯</span><span onclick="setAvatar(this)">🦁</span><span onclick="setAvatar(this)">🐻</span><span onclick="setAvatar(this)">🐼</span><span onclick="setAvatar(this)">🐸</span><span onclick="setAvatar(this)">🦊</span><span onclick="setAvatar(this)">🐺</span><span onclick="setAvatar(this)">🦄</span><span onclick="setAvatar(this)">🐙</span><span onclick="setAvatar(this)">🦋</span><span onclick="setAvatar(this)">🐬</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);margin:8px 0;padding-top:8px;display:flex;flex-direction:column;gap:6px;">
+          <button onclick="openProgressView();toggleProfileMenu()" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;color:var(--text);text-align:left;">📊 My Progress</button>
+          <button id="menuParentBtn" onclick="openParentDashboard();toggleProfileMenu()" style="display:none;width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;color:var(--text);text-align:left;">👨‍👩‍👧 Parent Dashboard</button>
+          <button onclick="handleSignOut()" style="width:100%;padding:8px 12px;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;color:#dc2626;text-align:left;">🚪 Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOCK EXAM OVERLAY -->
+<div id="mockExamOverlay" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border-radius:24px;padding:40px;max-width:440px;width:90%;text-align:center;border:1px solid var(--border);">
+    <div style="font-size:48px;margin-bottom:16px;">📝</div>
+    <h2 style="font-size:24px;font-weight:900;color:var(--text);margin-bottom:8px;">Mock Exam</h2>
+    <p style="color:var(--muted);margin-bottom:8px;">Full 80-question timed paper — GL Assessment format.</p>
+    <p style="color:var(--accent);font-weight:700;font-size:14px;margin-bottom:24px;">🚧 Coming very soon!</p>
+    <button onclick="document.getElementById('mockExamOverlay').style.display='none'" style="padding:12px 32px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;">Got it</button>
+  </div>
+</div>
+
+<!-- PROGRESS OVERLAY -->
+<div id="progressOverlay" style="display:none;position:fixed;inset:0;z-index:600;background:var(--bg);overflow-y:auto;">
+  <div style="max-width:800px;margin:0 auto;padding:32px 24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+      <h1 style="font-size:28px;font-weight:900;color:var(--text);">📊 My Progress</h1>
+      <button onclick="document.getElementById('progressOverlay').style.display='none'" style="padding:10px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;color:var(--text);">✕ Close</button>
+    </div>
+    <div id="progressContent" style="color:var(--muted);text-align:center;padding:40px;">Loading your progress...</div>
   </div>
 </div>
 
@@ -782,6 +845,7 @@ async function loadProfile() {
     xp = totalXP;
     const xpEl = document.getElementById('xpCount');
     if (xpEl) xpEl.textContent = xp;
+    updateHeaderUI();
   }
 }
 
@@ -1347,7 +1411,7 @@ function loadQuestion(){
   stopTimer(); startTimer();
 
   document.getElementById('qProgress').textContent = `Q${currentQIdx+1} of ${currentQBank.length}`;
-  document.getElementById('qStem').textContent = q.stem;
+  if(q.question && q.question !== q.stem) { document.getElementById('qStem').innerHTML = '<span style="font-size:13px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:8px;">' + q.stem + '</span>' + q.question; } else { document.getElementById('qStem').textContent = q.stem; }
   document.getElementById('resultPanel').className = 'result-panel';
   document.getElementById('checkBtn').style.display = '';
   document.getElementById('checkBtn').disabled = true;
@@ -1559,6 +1623,132 @@ function updateBubble(text){
   document.getElementById('bubbleText').innerHTML=text;
 }
 
+
+// ── TOPBAR FUNCTIONS ──
+function toggleProfileMenu() {
+  const menu = document.getElementById('profileMenu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('avatarWrap') || document.querySelector('.avatar-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    const menu = document.getElementById('profileMenu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
+function setAvatar(el) {
+  const emoji = el.textContent;
+  document.getElementById('userAvatar').textContent = emoji;
+  document.getElementById('menuAvatar').textContent = emoji;
+  // Save to Supabase
+  if (currentUser) {
+    sb.from('profiles').update({ avatar_emoji: emoji }).eq('id', currentUser.id);
+  }
+}
+
+function openMockExam() {
+  document.getElementById('mockExamOverlay').style.display = 'flex';
+}
+
+async function openProgressView() {
+  document.getElementById('progressOverlay').style.display = 'block';
+  const el = document.getElementById('progressContent');
+  el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">Loading...</p>';
+  
+  if (!currentUser) {
+    el.innerHTML = '<p style="color:var(--muted);text-align:center;">Please sign in to view progress.</p>';
+    return;
+  }
+
+  const { data: progress } = await sb.from('progress').select('*').eq('user_id', currentUser.id);
+  
+  if (!progress || progress.length === 0) {
+    el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px;">No progress yet — start a topic to begin tracking!</p>';
+    return;
+  }
+
+  const totalXP = progress.reduce((s,r) => s + (r.xp_earned||0), 0);
+  const totalQ = progress.reduce((s,r) => s + (r.questions_attempted||0), 0);
+  const totalC = progress.reduce((s,r) => s + (r.questions_correct||0), 0);
+  const acc = totalQ > 0 ? Math.round(totalC/totalQ*100) : 0;
+  const completed = progress.filter(r=>r.completed).length;
+
+  const subjectColors = {english:'#6c63ff',maths:'#3b82f6',verbal:'#22c55e',nvr:'#f59e0b'};
+  const subjectMap = {};
+  progress.forEach(p => {
+    if(!subjectMap[p.subject]) subjectMap[p.subject] = [];
+    subjectMap[p.subject].push(p);
+  });
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;">
+      <div style="background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:var(--accent);">${totalXP.toLocaleString()}</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:4px;">Total XP</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#22c55e;">${acc}%</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:4px;">Accuracy</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#f59e0b;">${totalQ}</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:4px;">Questions Done</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#6c63ff;">${completed}</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:4px;">Topics Completed</div>
+      </div>
+    </div>
+    ${Object.entries(subjectMap).map(([subj, topics]) => {
+      const sa = topics.reduce((s,r)=>s+(r.questions_attempted||0),0);
+      const sc = topics.reduce((s,r)=>s+(r.questions_correct||0),0);
+      const sacc = sa > 0 ? Math.round(sc/sa*100) : 0;
+      const color = subjectColors[subj]||'#6c63ff';
+      return `<div style="background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="font-weight:800;color:var(--text);font-size:16px;">${subj.charAt(0).toUpperCase()+subj.slice(1)}</h3>
+          <span style="font-weight:800;color:${color};">${sacc}%</span>
+        </div>
+        <div style="background:var(--border);border-radius:100px;height:8px;overflow:hidden;margin-bottom:12px;">
+          <div style="width:${sacc}%;height:100%;background:${color};border-radius:100px;"></div>
+        </div>
+        ${topics.map(t=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          <span style="color:var(--muted);">${t.topic}</span>
+          <span style="font-weight:700;color:${t.completed?'#22c55e':'var(--muted)'};">${t.completed?'✅':'—'} ${t.questions_correct||0}/${t.questions_attempted||0}</span>
+        </div>`).join('')}
+      </div>`;
+    }).join('')}
+  `;
+}
+
+// Update header after profile loads
+function updateHeaderUI() {
+  if (!currentProfile) return;
+  const nameEl = document.getElementById('userName');
+  const avatarEl = document.getElementById('userAvatar');
+  const menuAvatarEl = document.getElementById('menuAvatar');
+  const menuNameEl = document.getElementById('menuName');
+  const menuEmailEl = document.getElementById('menuEmail');
+  
+  if (nameEl) nameEl.textContent = currentProfile.full_name || currentProfile.email.split('@')[0];
+  const emoji = currentProfile.avatar_emoji || '🦉';
+  if (avatarEl) avatarEl.textContent = emoji;
+  if (menuAvatarEl) menuAvatarEl.textContent = emoji;
+  if (menuNameEl) menuNameEl.textContent = currentProfile.full_name || 'My Account';
+  if (menuEmailEl) menuEmailEl.textContent = currentProfile.email || '';
+  
+  // Show parent-only elements
+  if (currentProfile.role === 'parent') {
+    const dashLink = document.getElementById('parentDashLink');
+    const menuParentBtn = document.getElementById('menuParentBtn');
+    if (dashLink) dashLink.style.display = '';
+    if (menuParentBtn) menuParentBtn.style.display = '';
+  }
+}
+
 // ── HOMEWORK ──
 function toggleHW(el){
   el.classList.toggle('done');
@@ -1616,35 +1806,12 @@ closeCelebration = function(){
   _origCloseCelebration();
 };
 
-// ── SIGN OUT BUTTON ──
-function addHeaderButtons() {
-  const header = document.querySelector('.header-right');
-  if (!header) return;
-  // Add sign out button if not already there
-  if (!document.getElementById('signOutBtn')) {
-    const btn = document.createElement('button');
-    btn.id = 'signOutBtn';
-    btn.onclick = handleSignOut;
-    btn.textContent = 'Sign Out';
-    btn.style.cssText = 'padding:6px 14px;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;font-family:Nunito,sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-left:8px;';
-    header.appendChild(btn);
-
-    // Add parent dashboard button if user is parent
-    if(currentProfile && currentProfile.role === 'parent') {
-      const dashBtn = document.createElement('button');
-      dashBtn.onclick = openParentDashboard;
-      dashBtn.textContent = '📊 Dashboard';
-      dashBtn.style.cssText = 'padding:6px 14px;background:rgba(108,99,255,0.3);border:none;border-radius:8px;color:#fff;font-family:Nunito,sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-left:8px;';
-      header.appendChild(dashBtn);
-    }
-  }
-}
+// Header buttons now built into topbar HTML
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', async () => {
   await checkAuth();
-  // Add header buttons after app loads
-  setTimeout(addHeaderButtons, 500);
+  // Header is populated via updateHeaderUI() after auth
 });
 </script>
 </div><!-- /appScreen -->
