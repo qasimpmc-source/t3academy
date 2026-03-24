@@ -498,7 +498,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
             <div class="subj-card-desc">Comprehension passages, vocabulary, grammar and creative writing skills for GL Assessment.</div>
             <div class="subj-card-footer">
               <button class="subj-card-btn btn-english">Start →</button>
-              <div class="subj-card-topics">8 topics · 64 questions</div>
+              <div class="subj-card-topics">4 topics · 32 questions</div>
             </div>
           </div>
 
@@ -508,7 +508,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
             <div class="subj-card-desc">Number, fractions, algebra, shape, data handling and problem solving — all GL Assessment topics.</div>
             <div class="subj-card-footer">
               <button class="subj-card-btn btn-maths">Start →</button>
-              <div class="subj-card-topics">10 topics · 80 questions</div>
+              <div class="subj-card-topics">5 topics · 40 questions</div>
             </div>
           </div>
 
@@ -518,7 +518,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
             <div class="subj-card-desc">Synonyms, antonyms, codes, analogies, word patterns and sequences — built for GL Assessment style.</div>
             <div class="subj-card-footer">
               <button class="subj-card-btn btn-verbal">Start →</button>
-              <div class="subj-card-topics">12 topics · 96 questions</div>
+              <div class="subj-card-topics">6 topics · 38 questions</div>
             </div>
           </div>
 
@@ -528,7 +528,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
             <div class="subj-card-desc">Shapes, patterns, matrices, rotations and sequences — the visual thinking skills GL Assessment tests.</div>
             <div class="subj-card-footer">
               <button class="subj-card-btn btn-nvr">Start →</button>
-              <div class="subj-card-topics">9 topics · 72 questions</div>
+              <div class="subj-card-topics">6 topics · 48 questions</div>
             </div>
           </div>
 
@@ -637,31 +637,384 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
   </div>
 </div>
 
+<!-- ── AUTH SCREEN ── -->
+<div id="authScreen" style="display:flex;position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0f0f23 0%,#1a1a3e 50%,#0f0f23 100%);align-items:center;justify-content:center;font-family:'Nunito',sans-serif;">
+  <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;width:90%;max-width:420px;backdrop-filter:blur(20px);">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-size:48px;margin-bottom:8px;">🦉</div>
+      <h1 style="color:#fff;font-size:28px;font-weight:900;letter-spacing:-1px;">T3 Academy</h1>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;margin-top:4px;">11+ Exam Preparation</p>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px;margin-bottom:24px;">
+      <button id="tab-login" class="auth-tab active" onclick="showAuthTab('login')" style="flex:1;padding:10px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.15);color:#fff;">Sign In</button>
+      <button id="tab-signup" class="auth-tab" onclick="showAuthTab('signup')" style="flex:1;padding:10px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;background:transparent;color:rgba(255,255,255,0.5);">Create Account</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="form-login" class="auth-form">
+      <div style="margin-bottom:16px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email</label>
+        <input id="loginEmail" type="email" placeholder="your@email.com" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;"/>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Password</label>
+        <input id="loginPassword" type="password" placeholder="••••••••" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;"/>
+      </div>
+      <button onclick="handleLogin()" style="width:100%;padding:14px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;cursor:pointer;letter-spacing:0.5px;">Sign In →</button>
+      <div id="loginError" style="color:#f87171;font-size:13px;margin-top:12px;text-align:center;display:none;"></div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="form-signup" class="auth-form" style="display:none;">
+      <div style="margin-bottom:16px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Full Name</label>
+        <input id="signupName" type="text" placeholder="e.g. Adam Smith" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;"/>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email</label>
+        <input id="signupEmail" type="email" placeholder="your@email.com" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;"/>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Password</label>
+        <input id="signupPassword" type="password" placeholder="Min 6 characters" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;"/>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">I am a...</label>
+        <select id="signupRole" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a3e;color:#fff;font-family:'Nunito',sans-serif;font-size:15px;outline:none;">
+          <option value="student">Student (child)</option>
+          <option value="parent">Parent</option>
+        </select>
+      </div>
+      <button onclick="handleSignup()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#4f46e5);border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;cursor:pointer;letter-spacing:0.5px;">Create Account →</button>
+      <div id="signupError" style="color:#f87171;font-size:13px;margin-top:12px;text-align:center;display:none;"></div>
+      <div id="signupSuccess" style="color:#4ade80;font-size:13px;margin-top:12px;text-align:center;display:none;">✅ Account created! Please check your email to confirm, then sign in.</div>
+    </div>
+
+    <p style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;margin-top:20px;">By signing in you agree to our terms of use</p>
+  </div>
+</div>
+
+<!-- ── PARENT DASHBOARD ── -->
+<div id="parentDashboard" style="display:none;position:fixed;inset:0;z-index:500;background:#f8fafc;overflow-y:auto;font-family:'Nunito',sans-serif;">
+  <div style="max-width:900px;margin:0 auto;padding:24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+      <div>
+        <h1 style="font-size:28px;font-weight:900;color:#1e293b;">Parent Dashboard 📊</h1>
+        <p style="color:#64748b;font-size:14px;">Track your child's 11+ progress</p>
+      </div>
+      <button onclick="closeParentDashboard()" style="padding:10px 20px;background:#f1f5f9;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;color:#475569;">← Back to Learning</button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;" id="dashSummary">
+      <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:32px;margin-bottom:8px;">⭐</div>
+        <div style="font-size:28px;font-weight:900;color:#1e293b;" id="dashXP">—</div>
+        <div style="color:#64748b;font-size:13px;font-weight:600;">Total XP Earned</div>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:32px;margin-bottom:8px;">✅</div>
+        <div style="font-size:28px;font-weight:900;color:#22c55e;" id="dashTopics">—</div>
+        <div style="color:#64748b;font-size:13px;font-weight:600;">Topics Completed</div>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:32px;margin-bottom:8px;">🎯</div>
+        <div style="font-size:28px;font-weight:900;color:#6c63ff;" id="dashAccuracy">—</div>
+        <div style="color:#64748b;font-size:13px;font-weight:600;">Overall Accuracy</div>
+      </div>
+      <div style="background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="font-size:32px;margin-bottom:8px;">📝</div>
+        <div style="font-size:28px;font-weight:900;color:#f59e0b;" id="dashQuestions">—</div>
+        <div style="color:#64748b;font-size:13px;font-weight:600;">Questions Answered</div>
+      </div>
+    </div>
+
+    <!-- Progress by Subject -->
+    <div style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:24px;">
+      <h2 style="font-size:18px;font-weight:800;color:#1e293b;margin-bottom:20px;">Progress by Subject</h2>
+      <div id="dashSubjects"></div>
+    </div>
+
+    <!-- Recent Sessions -->
+    <div style="background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+      <h2 style="font-size:18px;font-weight:800;color:#1e293b;margin-bottom:20px;">Recent Practice Sessions</h2>
+      <div id="dashSessions"><p style="color:#94a3b8;">Loading...</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="appScreen" style="display:none;">
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://rzryavpmzlzmunvrttrj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6cnlhdnBtemx6bXVudnJ0dHJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODEyNDcsImV4cCI6MjA4OTk1NzI0N30.dlljtcVzLgk0NZE6C49RvlmYIMO8kN4OiRbH0O85v-Q';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+let currentProfile = null;
+
+async function checkAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadProfile();
+    showApp();
+  } else {
+    showAuthScreen();
+  }
+}
+
+async function loadProfile() {
+  const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (data) {
+    currentProfile = data;
+    const nameEl = document.getElementById('userName');
+    const avatarEl = document.getElementById('userAvatar');
+    if (nameEl) nameEl.textContent = data.full_name || data.email.split('@')[0];
+    if (avatarEl) avatarEl.textContent = data.avatar_emoji || '🦉';
+    // Load XP from DB
+    const totalXP = await loadTotalXP();
+    xp = totalXP;
+    const xpEl = document.getElementById('xpCount');
+    if (xpEl) xpEl.textContent = xp;
+  }
+}
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    currentUser = data.user;
+    await loadProfile();
+    showApp();
+  } catch(e) {
+    errEl.textContent = e.message || 'Sign in failed. Please check your details.';
+    errEl.style.display = 'block';
+  }
+}
+
+async function handleSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const role = document.getElementById('signupRole').value;
+  const errEl = document.getElementById('signupError');
+  const successEl = document.getElementById('signupSuccess');
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+  try {
+    const { error } = await sb.auth.signUp({
+      email, password,
+      options: { data: { full_name: name, role } }
+    });
+    if (error) throw error;
+    successEl.style.display = 'block';
+  } catch(e) {
+    errEl.textContent = e.message || 'Sign up failed. Please try again.';
+    errEl.style.display = 'block';
+  }
+}
+
+async function handleSignOut() {
+  await sb.auth.signOut();
+  currentUser = null;
+  currentProfile = null;
+  showAuthScreen();
+}
+
+function showAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => {
+    t.style.background = 'transparent';
+    t.style.color = 'rgba(255,255,255,0.5)';
+  });
+  document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+  const activeTab = document.getElementById('tab-' + tab);
+  activeTab.style.background = 'rgba(255,255,255,0.15)';
+  activeTab.style.color = '#fff';
+  document.getElementById('form-' + tab).style.display = 'block';
+}
+
+function showAuthScreen() {
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'block';
+  goHome();
+}
+
+// ── PROGRESS DB FUNCTIONS ──
+async function saveProgress(subject, topic, correct, total, xpEarned) {
+  if (!currentUser) return;
+  const stars = correct >= total * 0.9 ? 3 : correct >= total * 0.7 ? 2 : correct >= total * 0.5 ? 1 : 0;
+  await sb.from('progress').upsert({
+    user_id: currentUser.id, subject, topic,
+    questions_attempted: total, questions_correct: correct,
+    stars, xp_earned: xpEarned, completed: stars > 0,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,subject,topic' });
+  await sb.from('sessions').insert({
+    user_id: currentUser.id, subject, topic,
+    score: correct, total, xp_earned: xpEarned
+  });
+}
+
+async function loadTotalXP() {
+  if (!currentUser) return 0;
+  const { data } = await sb.from('progress').select('xp_earned').eq('user_id', currentUser.id);
+  if (!data) return 0;
+  return data.reduce((sum, r) => sum + (r.xp_earned || 0), 0);
+}
+
+// ── PARENT DASHBOARD ──
+async function openParentDashboard() {
+  document.getElementById('parentDashboard').style.display = 'block';
+  await loadDashboardData();
+}
+
+function closeParentDashboard() {
+  document.getElementById('parentDashboard').style.display = 'none';
+}
+
+async function loadDashboardData() {
+  if (!currentUser) return;
+  const { data: progress } = await sb.from('progress').select('*').eq('user_id', currentUser.id);
+  const { data: sessions } = await sb.from('sessions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(10);
+
+  if (progress) {
+    const totalXP = progress.reduce((s, r) => s + (r.xp_earned || 0), 0);
+    const totalAttempted = progress.reduce((s, r) => s + (r.questions_attempted || 0), 0);
+    const totalCorrect = progress.reduce((s, r) => s + (r.questions_correct || 0), 0);
+    const topicsCompleted = progress.filter(r => r.completed).length;
+    const accuracy = totalAttempted > 0 ? Math.round(totalCorrect / totalAttempted * 100) : 0;
+
+    document.getElementById('dashXP').textContent = totalXP.toLocaleString();
+    document.getElementById('dashTopics').textContent = topicsCompleted;
+    document.getElementById('dashAccuracy').textContent = accuracy + '%';
+    document.getElementById('dashQuestions').textContent = totalAttempted;
+
+    // Subject breakdown
+    const subjectMap = {};
+    progress.forEach(p => {
+      if (!subjectMap[p.subject]) subjectMap[p.subject] = { attempted: 0, correct: 0, topics: 0 };
+      subjectMap[p.subject].attempted += p.questions_attempted || 0;
+      subjectMap[p.subject].correct += p.questions_correct || 0;
+      subjectMap[p.subject].topics += p.completed ? 1 : 0;
+    });
+
+    const subjectColors = { english: '#6c63ff', maths: '#3b82f6', verbal: '#22c55e', nvr: '#f59e0b' };
+    const subjectIcons = { english: '📖', maths: '🔢', verbal: '💬', nvr: '🔷' };
+    const subjectNames = { english: 'English', maths: 'Maths', verbal: 'Verbal Reasoning', nvr: 'Non-Verbal Reasoning' };
+
+    const dashSubjectsEl = document.getElementById('dashSubjects');
+    dashSubjectsEl.innerHTML = Object.entries(subjectMap).map(([subj, data]) => {
+      const acc = data.attempted > 0 ? Math.round(data.correct / data.attempted * 100) : 0;
+      const color = subjectColors[subj] || '#6c63ff';
+      return `<div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:700;color:#1e293b;">${subjectIcons[subj] || '📚'} ${subjectNames[subj] || subj}</span>
+          <span style="font-size:13px;color:#64748b;">${data.correct}/${data.attempted} correct · ${acc}% accuracy</span>
+        </div>
+        <div style="background:#f1f5f9;border-radius:100px;height:8px;overflow:hidden;">
+          <div style="width:${acc}%;height:100%;background:${color};border-radius:100px;transition:width 0.5s;"></div>
+        </div>
+      </div>`;
+    }).join('') || '<p style="color:#94a3b8;">No progress recorded yet.</p>';
+  }
+
+  // Recent sessions
+  const sessionsEl = document.getElementById('dashSessions');
+  if (sessions && sessions.length > 0) {
+    sessionsEl.innerHTML = sessions.map(s => {
+      const acc = s.total > 0 ? Math.round(s.score / s.total * 100) : 0;
+      const date = new Date(s.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      const color = acc >= 80 ? '#22c55e' : acc >= 60 ? '#f59e0b' : '#ef4444';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f1f5f9;">
+        <div>
+          <div style="font-weight:700;color:#1e293b;font-size:14px;">${s.topic}</div>
+          <div style="color:#94a3b8;font-size:12px;">${s.subject} · ${date}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-weight:800;color:${color};font-size:16px;">${acc}%</div>
+          <div style="color:#94a3b8;font-size:12px;">${s.score}/${s.total} · +${s.xp_earned}xp</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    sessionsEl.innerHTML = '<p style="color:#94a3b8;">No sessions recorded yet. Start practising!</p>';
+  }
+}
+
+// ── AI QUESTION GENERATOR ──
+async function generateAIQuestion(subject, topic) {
+  const bank = questionBanks[topic] || [];
+  const samples = bank.slice(0, 2).map(q =>
+    `Example Q: ${q.question || q.stem}\nOptions: ${(q.options||[]).join(' | ')}\nCorrect: ${(q.options||[])[q.correct] || ''}\nExplanation: ${q.explanation || ''}`
+  ).join('\n\n');
+
+  const prompt = `You are a GL Assessment 11+ exam question writer for the topic "${topic}" in ${subject}.
+
+Here are example questions from real GL Assessment papers to guide your style:
+${samples || 'Generate a question appropriate for UK 11+ exam preparation.'}
+
+Generate ONE fresh multiple choice question. Return ONLY valid JSON, no other text:
+{"stem":"brief instruction","question":"the question","options":["A","B","C","D","E"],"correct":0,"explanation":"why correct and why others wrong","tip":"practical exam tip","xp":10}
+
+Rules: correct = index 0-4. Fresh question, not a copy. GL Assessment difficulty. 5 options always.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content[0].text || '').replace(/```json|```/g, '').trim();
+    return JSON.parse(text);
+  } catch(e) {
+    return null;
+  }
+}
+</script>
+
 <script>
 // ── DATA ──
+
+
+
 const subjects = {
   english: {
     name:'English', icon:'📖', color:'#6c63ff',
     topics:[
-      {name:'Reading comprehension',icon:'📄',questions:8,done:true,stars:3},
-      {name:'Vocabulary & synonyms',icon:'📝',questions:8,inProgress:true,stars:2},
-      {name:'Grammar & punctuation',icon:'✏️',questions:8,stars:0},
-      {name:'Inference & deduction',icon:'🔍',questions:8,stars:0},
-      {name:'Author\'s purpose & tone',icon:'🎭',questions:8,stars:0},
-      {name:'Creative writing techniques',icon:'✨',questions:8,stars:0},
+      {name:'Reading Comprehension',icon:'📄',questions:8,done:true,stars:3},
+      {name:'Vocabulary',icon:'📝',questions:8,stars:0},
+      {name:'Grammar',icon:'✏️',questions:8,stars:0},
+      {name:'Punctuation & Spelling',icon:'🔤',questions:8,stars:0},
     ]
   },
   maths: {
     name:'Maths', icon:'🔢', color:'#3b82f6',
     topics:[
-      {name:'Number & place value',icon:'🔢',questions:8,done:true,stars:3},
-      {name:'Fractions & decimals',icon:'½',questions:8,inProgress:true,stars:1},
-      {name:'Percentages & ratio',icon:'%',questions:8,stars:0},
-      {name:'Algebra & sequences',icon:'x²',questions:8,stars:0},
-      {name:'Shape & geometry',icon:'📐',questions:8,stars:0},
-      {name:'Data & graphs',icon:'📊',questions:8,stars:0},
-      {name:'Time & measurement',icon:'⏱',questions:8,stars:0},
-      {name:'Word problems',icon:'💭',questions:8,stars:0},
+      {name:'Number & Place Value',icon:'🔢',questions:8,done:true,stars:3},
+      {name:'Fractions & Percentages',icon:'½',questions:8,stars:0},
+      {name:'Calculation',icon:'➕',questions:8,stars:0},
+      {name:'Measurement & Time',icon:'⏱',questions:8,stars:0},
+      {name:'Reasoning & Logic',icon:'💭',questions:8,stars:0},
     ]
   },
   verbal: {
@@ -669,117 +1022,239 @@ const subjects = {
     topics:[
       {name:'Synonyms',icon:'🔤',questions:8,inProgress:true,stars:2},
       {name:'Antonyms',icon:'↔️',questions:8,stars:0},
-      {name:'Word analogies',icon:'🔗',questions:8,stars:0},
-      {name:'Letter codes',icon:'🔡',questions:8,stars:0},
-      {name:'Number codes',icon:'🔢',questions:8,stars:0},
-      {name:'Hidden words',icon:'🔍',questions:8,stars:0},
-      {name:'Word connections',icon:'🕸',questions:8,stars:0},
-      {name:'Sequences',icon:'📈',questions:8,stars:0},
+      {name:'Number Sequences',icon:'📈',questions:8,stars:0},
+      {name:'Letter Sequences',icon:'🔡',questions:8,stars:0},
+      {name:'Word Connections',icon:'🕸',questions:8,stars:0},
+      {name:'Three Letters Removed',icon:'🔍',questions:8,stars:0},
     ]
   },
   nvr: {
     name:'Non-Verbal Reasoning', icon:'🔷', color:'#f59e0b',
     topics:[
-      {name:'Shape patterns',icon:'🔷',questions:8,stars:0},
-      {name:'Matrices',icon:'⬛',questions:8,stars:0},
-      {name:'Rotations & reflections',icon:'🔄',questions:8,stars:0},
-      {name:'Odd one out',icon:'❌',questions:8,stars:0},
-      {name:'Codes & symbols',icon:'🔣',questions:8,stars:0},
-      {name:'Nets & 3D shapes',icon:'📦',questions:8,stars:0},
+      {name:'Shape Series',icon:'🔷',questions:8,stars:0},
+      {name:'Shape Analogies',icon:'🔄',questions:8,stars:0},
+      {name:'Similarities',icon:'🔗',questions:8,stars:0},
+      {name:'Odd One Out',icon:'❌',questions:8,stars:0},
+      {name:'Codes',icon:'🔣',questions:8,stars:0},
+      {name:'Matrix Completion',icon:'⬛',questions:8,stars:0},
     ]
   }
 };
 
 // ── QUESTION BANKS ──
 const questionBanks = {
+
+  // ── VERBAL REASONING ──────────────────────────────────
   'Synonyms': [
-    {
-      stem:'Which word is closest in meaning to ANCIENT?',
-      options:['Modern','Old','Broken','Tiny'],
-      correct:1,
-      explanation:'ANCIENT means very old — something that existed long ago. "Modern" is the opposite. "Broken" and "Tiny" relate to condition and size, not age.',
-      tip:'For synonyms, think about the core meaning of the word. Ancient = very, very old.',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to FURIOUS?',
-      options:['Happy','Scared','Very angry','Tired'],
-      correct:2,
-      explanation:'FURIOUS means extremely angry — much stronger than just "annoyed". It comes from the same root as "fury".',
-      tip:'Furious = extremely angry. Remember: fury → furious!',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to TRANSPARENT?',
-      options:['Colourful','See-through','Solid','Rough'],
-      correct:1,
-      explanation:'TRANSPARENT means you can see through it — like glass or clear water. Think of a transparent plastic bag.',
-      tip:'Trans = through + parent (appears) → you can see through it!',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to ENORMOUS?',
-      options:['Tiny','Loud','Huge','Sharp'],
-      correct:2,
-      explanation:'ENORMOUS means extremely large or huge. "Tiny" is the opposite. The other options relate to sound and sharpness.',
-      tip:'Enormous sounds big — and it is! Think of an enormous elephant. 🐘',
-      xp:10
-    },
-    {
-      stem:'Which word is closest in meaning to SWIFT?',
-      options:['Heavy','Fast','Quiet','Cold'],
-      correct:1,
-      explanation:'SWIFT means moving quickly — fast. A swift river flows rapidly. A swift is also a bird known for flying fast!',
-      tip:'Swift = fast. A swift runner, a swift river, a swift decision.',
-      xp:15
-    }
+    { stem:'Which word is closest in meaning to ANCIENT?', options:['Modern','Old','Broken','Tiny','Strange'], correct:1, explanation:'ANCIENT means very old. Modern is the opposite. Broken relates to condition, Tiny to size.', tip:'Ancient = very, very old. Think: ancient Rome, ancient Egypt.', xp:10 },
+    { stem:'Which word is closest in meaning to FURIOUS?', options:['Happy','Scared','Very angry','Tired','Excited'], correct:2, explanation:'FURIOUS means extremely angry. It comes from the same root as fury.', tip:'Furious = extremely angry. Remember: fury → furious!', xp:10 },
+    { stem:'Which word is closest in meaning to TRANSPARENT?', options:['Colourful','See-through','Solid','Rough','Shiny'], correct:1, explanation:'TRANSPARENT means you can see through it — like glass or clear water.', tip:'Trans = through. Transparent = you can see through it!', xp:10 },
+    { stem:'Which word is closest in meaning to ENORMOUS?', options:['Tiny','Loud','Huge','Sharp','Round'], correct:2, explanation:'ENORMOUS means extremely large. Tiny is the opposite.', tip:'Enormous = huge. Think of an enormous elephant!', xp:10 },
+    { stem:'Which word is closest in meaning to SWIFT?', options:['Heavy','Fast','Quiet','Cold','Bright'], correct:1, explanation:'SWIFT means moving quickly — fast. A swift river flows rapidly.', tip:'Swift = fast. A swift runner, a swift decision.', xp:10 },
+    { stem:'Which word is closest in meaning to COURAGEOUS?', options:['Tired','Brave','Clever','Kind','Loud'], correct:1, explanation:'COURAGEOUS means showing courage — being brave in the face of danger.', tip:'Courageous = brave. Courage and courageous share the same root.', xp:10 },
+    { stem:'Which word is closest in meaning to PECULIAR?', options:['Ordinary','Strange','Beautiful','Small','Angry'], correct:1, explanation:'PECULIAR means strange or unusual — something that seems odd.', tip:'Peculiar = odd or strange. That is peculiar! means That is strange!', xp:10 },
+    { stem:'Which word is closest in meaning to ACCURATE?', options:['Quick','Careful','Correct','Difficult','Simple'], correct:2, explanation:'ACCURATE means correct and precise — without errors.', tip:'Accurate = correct and precise. Accuracy means getting it exactly right.', xp:10 }
   ],
-  'Fractions & decimals': [
-    {
-      stem:'What is ¾ + ⅛?',
-      options:['4/12','7/8','8/8','5/8'],
-      correct:1,
-      explanation:'Convert ¾ to eighths: ¾ = 6/8. Then 6/8 + 1/8 = 7/8. Always find a common denominator first!',
-      tip:'To add fractions: make the bottom numbers the same first (common denominator).',
-      xp:15
-    },
-    {
-      stem:'What is 0.6 as a fraction in its simplest form?',
-      options:['6/100','3/5','6/10','1/6'],
-      correct:1,
-      explanation:'0.6 = 6/10. Simplify by dividing top and bottom by 2: 6÷2 = 3, 10÷2 = 5. So 0.6 = 3/5.',
-      tip:'Decimal to fraction: put the digits over 10 (or 100), then simplify.',
-      xp:15
-    },
-    {
-      stem:'Which fraction is bigger: 2/3 or 3/5?',
-      options:['2/3','3/5','They are equal','Cannot tell'],
-      correct:0,
-      explanation:'Convert to the same denominator: 2/3 = 10/15 and 3/5 = 9/15. So 2/3 (= 10/15) is bigger than 3/5 (= 9/15).',
-      tip:'To compare fractions, convert to the same denominator and compare the tops.',
-      xp:20
-    }
+
+  'Antonyms': [
+    { stem:'Which word is most opposite in meaning to ANCIENT?', options:['Old','Modern','Broken','Historical','Crumbling'], correct:1, explanation:'ANCIENT means very old. MODERN means new and current — its direct opposite.', tip:'Ancient = very old. Modern = new. They are opposites.', xp:10 },
+    { stem:'Which word is most opposite in meaning to TRANSPARENT?', options:['Clear','Obvious','Opaque','Bright','Hollow'], correct:2, explanation:'TRANSPARENT means see-through. OPAQUE is its opposite — you cannot see through it.', tip:'Transparent = see-through. Opaque = cannot see through. Complete opposites.', xp:10 },
+    { stem:'Which word is most opposite in meaning to COURAGEOUS?', options:['Weak','Cowardly','Slow','Quiet','Tired'], correct:1, explanation:'COURAGEOUS means brave. COWARDLY is its opposite — showing fear.', tip:'Courageous = brave. Cowardly = showing fear. They are opposites.', xp:10 },
+    { stem:'Which word is most opposite in meaning to RELEASE?', options:['Free','Let go','Seize','Move','Travel'], correct:2, explanation:'RELEASE means to let go. SEIZE means to grab and hold — its opposite.', tip:'Release = let go. Seize = grab and hold. They are opposites.', xp:15 },
+    { stem:'Which word is most opposite in meaning to CHAOS?', options:['Noise','Order','Quiet','Tired','Calm'], correct:1, explanation:'CHAOS means complete disorder. ORDER means everything arranged properly — its opposite.', tip:'Chaos = disorder. Order = everything in its place. Opposites.', xp:15 }
   ],
-  'Reading comprehension': [
+
+  'Number Sequences': [
+    { stem:'Find the number that continues the series.', question:'4  8  11  15  18  ?', options:['21','20','25','22','28'], correct:0, explanation:'The pattern alternates +4 and +3: 4+4=8, 8+3=11, 11+4=15, 15+3=18, 18+3=21.', tip:'Look for alternating patterns — sometimes two rules take turns!', xp:15 },
+    { stem:'Find the number that continues the series.', question:'20  23  27  32  38  ?', options:['45','48','46','39','51'], correct:0, explanation:'The gaps increase by 1 each time: +3, +4, +5, +6, +7. So 38+7=45.', tip:'Check the gaps between numbers — they might be increasing each time.', xp:20 },
+    { stem:'Find the number that continues the series.', question:'18  36  72  144  288  ?', options:['432','504','528','574','576'], correct:4, explanation:'Each number doubles: 18×2=36, 36×2=72, 72×2=144, 144×2=288, 288×2=576.', tip:'When numbers grow quickly, try doubling or multiplying.', xp:15 },
+    { stem:'Find the number that continues the series.', question:'92  79  66  53  40  ?', options:['27','31','33','34','37'], correct:0, explanation:'Subtract 13 each time: 92-13=79, 79-13=66, and so on. 40-13=27.', tip:'When numbers decrease, find how much they decrease by each step.', xp:15 },
+    { stem:'Find the number that continues the series.', question:'289  315  341  367  393  ?', options:['403','404','417','419','445'], correct:3, explanation:'Each number increases by 26: 289+26=315, 315+26=341, and so on. 393+26=419.', tip:'Calculate the gap between each pair of numbers to find the rule.', xp:15 }
+  ],
+
+  'Letter Sequences': [
+    { stem:'Find the next pair of letters in the series.', question:'CQ  DQ  EP  FP  ?', options:['GP','GO','HO','GR','GQ'], correct:1, explanation:'First letters go up by 1: C,D,E,F,G. Second letters appear twice each going down: Q,Q,P,P,O. Answer: GO.', tip:'Look at each letter in the pair separately — they may follow different rules.', xp:15 },
+    { stem:'Find the next pair of letters in the series.', question:'JL  ML  PL  SL  VL  ?', options:['ZL','YL','VL','XL','UL'], correct:1, explanation:'First letters jump +3 each time: J,M,P,S,V,Y. Second letter stays L throughout. Answer: YL.', tip:'If one letter stays the same throughout, focus on the pattern of the other.', xp:15 },
+    { stem:'Find the next pair of letters in the series.', question:'UD  VF  WH  XJ  ?', options:['ZL','YL','YK','ZK','YM'], correct:1, explanation:'First letters +1: U,V,W,X,Y. Second letters +2: D,F,H,J,L. Answer: YL.', tip:'Each letter in the pair can follow a different rule — work them out separately.', xp:20 },
+    { stem:'Find the next pair of letters in the series.', question:'ZO  WL  TI  QF  ?', options:['NC','OD','MC','ND','OB'], correct:0, explanation:'First letters go back 3: Z,W,T,Q,N. Second letters go back 3: O,L,I,F,C. Answer: NC.', tip:'Both letters can be going backwards — use the alphabet to count backwards.', xp:20 }
+  ],
+
+  'Word Connections': [
+    { stem:'Which word goes equally well with BOTH pairs?', question:'(permit allow) (rent hire)', options:['grant','let','agree','use','loan'], correct:1, explanation:'LET means permit or allow. LET also means rent — as in to let a flat.', tip:'Test each option with ALL four words. The correct word must fit every one.', xp:15 },
+    { stem:'Which word goes equally well with BOTH pairs?', question:'(wood trunk) (howl wail)', options:['tree','shout','cut','bark','call'], correct:3, explanation:'BARK is the woody outer layer of a tree trunk. To BARK also means to howl like a dog.', tip:'Many English words have two very different meanings. Think of all possibilities!', xp:15 },
+    { stem:'Which word goes equally well with BOTH pairs?', question:'(jump leap) (well water)', options:['hop','flow','move','source','spring'], correct:4, explanation:'SPRING means to jump or leap. A SPRING is also a natural source of water.', tip:'Spring has many meanings: the season, a jump, a coil, a water source.', xp:15 },
+    { stem:'Which word goes equally well with BOTH pairs?', question:'(chapter paragraph) (corridor alley)', options:['book','path','walk','read','passage'], correct:4, explanation:'A PASSAGE is a section of text. A PASSAGE is also a corridor or narrow alley.', tip:'Think of all the different contexts each word can be used in.', xp:15 },
+    { stem:'Which word goes equally well with BOTH pairs?', question:'(allotment patch) (conspire plan)', options:['plot','scheme','garden','land','conceive'], correct:0, explanation:'A PLOT is a small piece of land. To PLOT also means to conspire or plan secretly.', tip:'A plot can be land OR a secret plan — two very different meanings!', xp:20 }
+  ],
+
+  'Three Letters Removed': [
+    { stem:'Three letters have been removed from the word in capitals. These letters make a real word. Which word?', question:'His favourite food was CABE.', options:['BAG','GET','EVE','SAG','BAT'], correct:0, explanation:'Insert BAG to make CABBAGE — His favourite food was CABBAGE.', tip:'Try each option in the gap and check if the full word makes sense in the sentence.', xp:15 },
+    { stem:'Three letters have been removed from the word in capitals. These letters make a real word. Which word?', question:'Porridge is great at FING you up.', options:['RAP','LAP','ILL','AIM','EAR'], correct:2, explanation:'Insert ILL to make FILLING — Porridge is great at FILLING you up.', tip:'Think about what the sentence means first, then find which word completes it.', xp:15 },
+    { stem:'Three letters have been removed from the word in capitals. These letters make a real word. Which word?', question:'It was a slow and difficult JNEY in the city.', options:['ARE','YOU','OUR','ANY','AIR'], correct:2, explanation:'Insert OUR to make JOURNEY — It was a slow and difficult JOURNEY in the city.', tip:'Say each option aloud inside the capitals: J+OUR+NEY = JOURNEY.', xp:15 },
+    { stem:'Three letters have been removed from the word in capitals. These letters make a real word. Which word?', question:'A GUATEE came with the television.', options:['RAN','SAT','NOT','OUR','OWE'], correct:3, explanation:'Insert OUR to make GUARANTEE — A GUARANTEE came with the television.', tip:'Consumer goods like televisions come with guarantees. Think about everyday objects.', xp:20 }
+  ],
+
+  // ── MATHS ─────────────────────────────────────────────
+  'Number & Place Value': [
+    { stem:'Write in figures', question:"What is 'five thousand, one hundred and nine' in figures?", options:['5190','5019','519','51009','5109'], correct:4, explanation:'5000 + 100 + 9 = 5109. Watch out for 51009 — that would be fifty-one thousand and nine.', tip:'Write out each place value column separately: Th | H | T | U = 5 | 1 | 0 | 9', xp:10 },
+    { stem:'Identify place value', question:'What is the value of the digit 7 in the number 7240?', options:['7 ones','7 tens','7 hundreds','7 thousands','7 thousandths'], correct:3, explanation:"In 7240, the 7 is in the thousands column. 7 × 1000 = 7000.", tip:'Always count columns from the right: units, tens, hundreds, thousands.', xp:10 },
+    { stem:'Missing number sequence', question:'What is the missing number? 393, 384, 375, ___, 357', options:['367','368','365','369','366'], correct:4, explanation:'Each term decreases by 9: 393−9=384, 384−9=375, 375−9=366, 366−9=357.', tip:'Find the common difference by subtracting one term from the previous.', xp:10 },
+    { stem:'Order decimals', question:'Put in order from smallest to biggest: 0.525, 0.7, 0.35, 0.175', options:['0.7, 0.525, 0.35, 0.175','0.175, 0.525, 0.35, 0.7','0.175, 0.35, 0.525, 0.7','0.7, 0.35, 0.175, 0.525','0.175, 0.35, 0.7, 0.525'], correct:2, explanation:'Compare tenths first: 0.1__ < 0.3__ < 0.5__ < 0.7. Order: 0.175, 0.35, 0.525, 0.7.', tip:'Line up the decimal points and compare digit by digit from left to right.', xp:10 },
+    { stem:'Rearrange digits', question:'Change the order of the digits in 6085 to make the biggest number possible.', options:['8605','6850','8650','6580','8560'], correct:2, explanation:'Place digits in descending order: 8, 6, 5, 0 → 8650. Never start with 0.', tip:'Sort digits from largest to smallest and write them in that order.', xp:10 }
+  ],
+
+  'Fractions & Percentages': [
+    { stem:'Fractions of amounts', question:'There were 24 marbles. I took out 1/3. How many did I take out?', options:['16','17','9','8','18'], correct:3, explanation:'1/3 of 24 = 24 ÷ 3 = 8.', tip:'To find a fraction of an amount, divide by the denominator then multiply by the numerator.', xp:10 },
+    { stem:'Equivalent fractions', question:'What number goes in the box? 3/4 = □/8', options:['5','6','7','9','12'], correct:1, explanation:'To get from 4 to 8 you multiply by 2, so multiply the numerator too: 3×2=6.', tip:'Whatever you do to the bottom of a fraction, do the same to the top.', xp:10 },
+    { stem:'Percentages', question:'What is 50% of 40?', options:['16','20','25','8','18'], correct:1, explanation:'50% = half. Half of 40 = 20.', tip:'50% = ÷2, 25% = ÷4, 10% = ÷10. Learn these shortcuts.', xp:10 },
+    { stem:'Fractions of amounts', question:'A bag has 36 sweets. Ethan took out 2/3 of them. How many did he take out?', options:['12','18','22','24','26'], correct:3, explanation:'1/3 of 36 = 12, so 2/3 = 24.', tip:'Always find 1/3 first, then multiply by the numerator.', xp:10 },
+    { stem:'Percentages', question:'What percentage of £5 is 50p?', options:['1%','5%','10%','20%','50%'], correct:2, explanation:'50p out of 500p. 50/500 = 1/10 = 10%.', tip:'Convert both amounts to the same unit (pence), then divide and multiply by 100.', xp:10 }
+  ],
+
+  'Calculation': [
+    { stem:'Division', question:'324 ÷ 6 = ?', options:['44','54','56','58','64'], correct:1, explanation:'300 ÷ 6 = 50, 24 ÷ 6 = 4. So 324 ÷ 6 = 54.', tip:'Break the number into parts that are easy to divide: 300 + 24.', xp:10 },
+    { stem:'Multiply decimals', question:'3.6 × 10 = ?', options:['0.36','0.036','36','360','36.6'], correct:2, explanation:'Multiplying by 10 moves every digit one place to the left: 3.6 → 36.', tip:'×10: digits move one place left. ×100: two places left. ÷10: one place right.', xp:10 },
+    { stem:'Algebra', question:'Greg thinks of a number, multiplies by 3, subtracts 5, then multiplies by 2. His answer is 26. What number did Greg think of?', options:['9','8','7','6','5'], correct:3, explanation:'Work backwards: 26 ÷ 2 = 13; 13 + 5 = 18; 18 ÷ 3 = 6.', tip:'Use inverse operations working backwards through the steps.', xp:10 },
+    { stem:'Written calculation', question:'27 × 99 = 2700 − □. What is the missing number?', options:['27','37','127','137','687'], correct:0, explanation:'27 × 99 = 27 × (100−1) = 2700 − 27 = 2673. So the box = 27.', tip:'Use the near-multiple trick: ×99 = ×100 − ×1.', xp:10 }
+  ],
+
+  'Measurement & Time': [
+    { stem:'Unit conversion', question:'Liam carried 10 parcels, each weighing 250 grams. How many kilograms altogether?', options:['25kg','2.50kg','2.25kg','0.25kg','0.025kg'], correct:1, explanation:'10 × 250g = 2500g. 2500g ÷ 1000 = 2.5kg.', tip:'Divide grams by 1000 to convert to kilograms.', xp:10 },
+    { stem:'Perimeter', question:"Zoey's carpet is 5m long and 4m wide. What is the distance all around the edge?", options:['14m','16m','18m','19m','20m'], correct:2, explanation:'Perimeter = 2 × (length + width) = 2 × (5 + 4) = 2 × 9 = 18m.', tip:'Perimeter of a rectangle = 2 × (l + w).', xp:10 },
+    { stem:'Time duration', question:'A train left at 10.20 and arrived at 11.15. How long did the journey take in minutes?', options:['45 mins','55 mins','65 mins','75 mins','95 mins'], correct:1, explanation:'10:20 to 11:00 = 40 mins, 11:00 to 11:15 = 15 mins. Total = 55 mins.', tip:'Count up to the next hour first, then add the remaining minutes.', xp:10 },
+    { stem:'Unit conversion', question:'How many times would you fill a 250ml bottle to make 1 litre?', options:['8 times','14 times','4 times','3 times','40 times'], correct:2, explanation:'1 litre = 1000ml. 1000 ÷ 250 = 4 times.', tip:'1 litre = 1000ml. Divide 1000 by the bottle size.', xp:10 }
+  ],
+
+  'Reasoning & Logic': [
+    { stem:'Reverse operations', question:"Matthew thinks of a number, multiplies by 2, then subtracts 4. The answer is 10. What number did he think of?", options:['3','7','10','12','14'], correct:1, explanation:'Work backwards: 10 + 4 = 14; 14 ÷ 2 = 7.', tip:'Reverse each step in reverse order: subtraction becomes addition, division becomes multiplication.', xp:10 },
+    { stem:'Square numbers', question:'9, 36, 81 are alike in one way. Which is it?', options:['They are all even numbers','They are all two-figure numbers','They are all prime numbers','They are all square numbers','They can all be divided by 2'], correct:3, explanation:'9=3², 36=6², 81=9². They are all perfect square numbers.', tip:'Learn square numbers up to 15²: 1,4,9,16,25,36,49,64,81,100,121,144,169,196,225.', xp:10 },
+    { stem:'Angles', question:'How many 30° angles fit together to make a straight line?', options:['3','4','5','6','7'], correct:3, explanation:'A straight line = 180°. 180 ÷ 30 = 6.', tip:'Angles on a straight line always add up to 180°.', xp:10 },
+    { stem:'Prime numbers', question:"Callum thinks of a two-digit number. Its digits add to 5. It is prime. It is less than 30. What is it?", options:['31','14','23','13','41'], correct:2, explanation:'Digits add to 5: 14, 23, 32, 41, 50. Prime and less than 30: 23. 23 is prime (not divisible by 2, 3, or itself). Answer: 23.', tip:'Work through each condition one at a time to eliminate wrong answers.', xp:10 }
+  ],
+
+  // ── ENGLISH ───────────────────────────────────────────
+  'Reading Comprehension': [
     {
       passage:'The blue whale is the largest animal ever known to have lived on Earth. These magnificent creatures can reach lengths of up to 30 metres and weigh as much as 200 tonnes. Despite their enormous size, blue whales feed almost exclusively on tiny shrimp-like creatures called krill. A single blue whale can consume up to 40 million krill per day during summer feeding seasons.',
       stem:'According to the passage, what do blue whales mainly eat?',
-      options:['Fish','Krill','Squid','Plankton'],
+      options:['Fish','Krill','Squid','Plankton','Shrimp'],
       correct:1,
-      explanation:'The passage clearly states blue whales feed "almost exclusively on tiny shrimp-like creatures called krill." The key word is "exclusively" — meaning mainly or only.',
-      tip:'For comprehension questions, look for key words in the question, then scan the passage to find where those words appear.',
+      explanation:'The passage states blue whales feed "almost exclusively on tiny shrimp-like creatures called krill." The key word is exclusively — meaning mainly or only.',
+      tip:'For literal retrieval questions, find the exact words in the passage. The answer is always directly stated.',
       xp:10
     },
     {
       passage:'The blue whale is the largest animal ever known to have lived on Earth. These magnificent creatures can reach lengths of up to 30 metres and weigh as much as 200 tonnes. Despite their enormous size, blue whales feed almost exclusively on tiny shrimp-like creatures called krill. A single blue whale can consume up to 40 million krill per day during summer feeding seasons.',
       stem:'What does the word "magnificent" most likely mean in this passage?',
-      options:['Dangerous','Impressive and wonderful','Difficult to spot','Very fast'],
+      options:['Dangerous','Impressive and wonderful','Difficult to spot','Very fast','Very loud'],
       correct:1,
-      explanation:'"Magnificent" is a positive describing word (adjective) meaning impressively beautiful or wonderful. The passage uses it to describe blue whales in an admiring way.',
+      explanation:'"Magnificent" is a positive adjective meaning impressively beautiful or wonderful. The passage uses it to describe blue whales admiringly.',
       tip:'When a comprehension asks about a word\'s meaning, look at the words around it for clues (context clues).',
       xp:15
+    },
+    {
+      passage:'Mary had been living in the secret garden for weeks. She had found a key buried in the earth near an old rose tree, and behind a curtain of ivy she had discovered a door. The garden had been locked for ten years. Now, every morning, she came to watch the plants grow.',
+      stem:'For how many years had the secret garden been locked?',
+      options:['Seven','Eight','Nine','Ten','Eleven'],
+      correct:3,
+      explanation:'The passage directly states "The garden had been locked for ten years." This is a literal retrieval question — the answer is stated exactly in the text.',
+      tip:'For literal retrieval, find the exact phrase in the passage that answers the question. Numbers are easy to spot — scan for them.',
+      xp:10
+    },
+    {
+      passage:'Mary had been living in the secret garden for weeks. She had found a key buried in the earth near an old rose tree, and behind a curtain of ivy she had discovered a door. The garden had been locked for ten years. Now, every morning, she came to watch the plants grow.',
+      stem:'Why was it particularly hard to see if there was a door to the garden?',
+      options:['The walls were very tall','The garden was covered in thick ivy','There were trees blocking the path','It was always dark near the wall','The door was painted the same colour as the wall'],
+      correct:1,
+      explanation:'The passage mentions "a curtain of ivy" hiding the door. The ivy covering the wall made it very hard to see any door behind it.',
+      tip:'Inference questions ask you to read between the lines. Find the part of the text that best explains the situation.',
+      xp:15
     }
+  ],
+
+  'Vocabulary': [
+    { stem:'Which word best replaces the underlined word without changing the meaning?', question:'The scientist made an ACCURATE measurement of the temperature.', options:['Approximate','Careless','Precise','Quick','Easy'], correct:2, explanation:'ACCURATE means correct and exact. PRECISE has the same meaning — without error. Approximate means roughly correct, which is the opposite.', tip:'For vocabulary questions, substitute each option into the sentence. Only the correct one preserves the exact meaning.', xp:10 },
+    { stem:'Which word is closest in meaning to INCESSANT?', question:'"Six days of incessant toil made little impression."', options:['Easy','Occasional','Never-stopping','Difficult','Rapid'], correct:2, explanation:'INCESSANT means never stopping, without pause. The prefix in- = not; cessant = ceasing. So incessant = not ceasing = continuous.', tip:'The prefix in- means not. Incessant = not ceasing = non-stop.', xp:15 },
+    { stem:'What does HABITABLE mean in context?', question:'"In a few days it was again habitable."', options:['Able to be repaired','Suitable for living in again','Completely destroyed','Larger than before','Comfortable and warm'], correct:1, explanation:'HABITABLE means fit to live in (from habitat — a place where something lives). After repairs, the house could be lived in again.', tip:'Break words into roots: habit = dwell/live. -able = capable of. Habitable = capable of being lived in.', xp:15 },
+    { stem:'Which word is closest in meaning to VIGOROUSLY?', question:'"We battered vigorously at the rock."', options:['Painfully','Rebelliously','Energetically','Carefully','Quietly'], correct:2, explanation:'VIGOROUSLY means with great energy and force. They were hitting the rock hard and actively. Energetically captures this perfectly.', tip:'Think about the physical action. Battering a rock is forceful and energetic — the adverb must match this sense of power.', xp:10 }
+  ],
+
+  'Grammar': [
+    { stem:'What type of word is the underlined word?', question:'"She walked CAREFULLY through the garden."', options:['Noun','Verb','Adjective','Adverb','Preposition'], correct:3, explanation:'CAREFULLY modifies the verb "walked" — it tells us how she walked. This is an adverb. It is formed from the adjective "careful" with the suffix -ly.', tip:'Adverbs modify verbs, adjectives or other adverbs. Ask: how? when? where? If it answers one of those questions about a verb, it\'s an adverb.', xp:10 },
+    { stem:'What type of word is the underlined word?', question:'"The TRAILING ivy covered the old wall."', options:['Noun','Verb','Adjective','Adverb','Preposition'], correct:2, explanation:'TRAILING comes before the noun "ivy" and describes it — what kind of ivy? Trailing ivy. This makes it an adjective (a participial adjective).', tip:'-ing words before a noun are adjectives. -ing words after "is/was/were" are part of a verb. Check which one applies.', xp:10 },
+    { stem:'Choose the correct word to complete the sentence.', question:'Ellie launched the ball into the air and watched it for _____ split-second.', options:['the','an','this','a','that'], correct:3, explanation:'"A split-second" is correct — split-second begins with a consonant sound so it takes the article "a" not "an".', tip:'Use "a" before consonant sounds and "an" before vowel sounds. The rule is about sound, not spelling.', xp:10 },
+    { stem:'Choose the correct verb form to complete the sentence.', question:'The green team _____ their previous round of batting feeling disheartened.', options:['were finishing','will finish','finish','are finishing','had finished'], correct:4, explanation:'"Had finished" is correct — this is the past perfect tense, used when one past action happened before another past action.', tip:'The past perfect (had + past participle) shows that one past event happened before another. Look for clues in surrounding sentences.', xp:15 }
+  ],
+
+  'Punctuation & Spelling': [
+    { stem:'Find the group of words that contains a punctuation mistake.', question:"'Why don't you play outside today,' suggested Tom's aunt.", options:["'Why don't you play outside today,'","suggested Tom's aunt.","No mistake (N)","don't / Tom's","today,' (comma)"], correct:0, explanation:'The comma should be a question mark because the speech is a question: "Why don\'t you play outside today?" A question inside speech marks needs a question mark, not a comma.', tip:"Direct speech: if the spoken words form a question, use a question mark inside the closing speech mark. Never use a comma where a question mark is needed.", xp:10 },
+    { stem:'Find the group of words that contains a spelling mistake.', question:'"antisipation before sports day."', options:['before exams or','antisipation before','sports day.','No mistake (N)','anticipation (correct)'], correct:1, explanation:'"Antisipation" is misspelled — the correct spelling is "anticipation." The error is using "s" instead of "c": anti-ci-pa-tion.', tip:'Break anticipation into syllables: an-tic-i-pa-tion. The "tic" part is the tricky bit — it\'s -tic- not -tis-.', xp:10 },
+    { stem:'Find the group of words that contains a spelling mistake.', question:'"to bring the past to life. In spite of their altered appearence"', options:['to bring the past to life.','In spite of their altered appearence,','pupils lined up','No mistake (N)','appearance (correct)'], correct:1, explanation:'"Appearence" is misspelled — the correct spelling is "appearance." The error is replacing "-ance" with "-ence."', tip:'The -ance/-ence suffix is one of the trickiest in English. Appearance = appear + ance. Memorise high-frequency words.', xp:10 },
+    { stem:'Find the group of words that contains a punctuation mistake.', question:'"Looking through my parents music collection, I was amazed."', options:['Looking through my parents','music collection,','I was amazed','No mistake (N)','parents (missing apostrophe)'], correct:0, explanation:'"Parents" needs an apostrophe: "my parents\' music collection" (belonging to the parents). Without the apostrophe, parents looks like a simple plural.', tip:"For plural possessives, the apostrophe goes AFTER the s: parents' (belonging to the parents).", xp:10 }
+  ],
+
+  // ── NON-VERBAL REASONING ──────────────────────────────
+  'Shape Series': [
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A dot moves clockwise around the four corners of a square, one step at a time. After visiting top-left, top-right, bottom-right, bottom-left... where is it next?', options:['Top-left','Top-right','Bottom-left','Bottom-right','No dot'], correct:0, explanation:'The dot moves clockwise: top-left → top-right → bottom-right → bottom-left → back to top-left. After four steps it returns to the start.', tip:'Always track ONE element at a time. Identify whether it moves, rotates, grows, or changes fill. Write out the rule in words before looking at options.', xp:10 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A series shows a star gaining one extra point each step: 4-point, 5-point, 6-point, empty, 8-point. Fill alternates shaded/unshaded. What fills the empty 4th cell?', options:['7-point star, unshaded','7-point star, shaded','6-point star, unshaded','8-point star, unshaded','7-point star, no outline'], correct:0, explanation:'Rule 1: star gains one point per cell (4,5,6,7,8). Rule 2: fill alternates shaded/unshaded. Cell 3 is shaded, so cell 4 must be unshaded. Cell 4 = 7-point star, unshaded.', tip:'When two rules overlap, track each rule separately. Missing one rule gives the wrong answer.', xp:15 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A series of five cells shows 1 arrow, 2 arrows, 3 arrows, empty cell, 5 arrows. All arrows point upward. What fills the empty 4th cell?', options:['3 arrows pointing up','4 arrows pointing up','4 arrows pointing down','5 arrows pointing up','2 arrows pointing down'], correct:1, explanation:'One arrow is added each cell. Cell 4 must contain 4 upward arrows.', tip:'For counting sequences, count carefully — easy marks are lost by misreading 3 vs 4.', xp:10 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A rectangle divided by a vertical line. Cell 1: line at far left. Cell 5: line at far right. With 5 equally spaced positions, where is the line in cell 3?', options:['Far left','Second position','Centre (middle)','Fourth position','Far right'], correct:2, explanation:'With 5 cells and the line moving from position 1 to position 5, cell 3 = middle position = centre of the rectangle.', tip:'For sliding element series, number positions 1–5. The missing cell\'s position is obvious from the pattern.', xp:10 }
+  ],
+
+  'Shape Analogies': [
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1: solid black triangle. Shape 2: same triangle as outline (unshaded). Shape 3: solid black circle. Which option correctly completes the pair?', options:['Solid black circle','Outline circle (unshaded)','Solid black square','Outline triangle','Half-shaded circle'], correct:1, explanation:'Rule: solid black → outline (remove fill, keep shape and size). Applying to solid black circle gives outline circle.', tip:'State the transformation as a sentence before looking at options: "the shape loses its fill". Then find the option that applies ONLY that rule.', xp:10 },
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1: arrow pointing right. Shape 2: same arrow rotated 180° (pointing left). Shape 3: flag pointing up-right. Which option correctly completes the pair?', options:['Flag pointing up-right (unchanged)','Flag pointing down-left (rotated 180°)','Flag pointing up-left (reflected)','Flag pointing down-right','Flag pointing left'], correct:1, explanation:'Rule: 180° rotation. Arrow pointing right → pointing left. Flag pointing up-right, rotated 180° → pointing down-left.', tip:'For rotation, physically rotate the page to visualise the result. 180° = turn upside down — both horizontal AND vertical axes flip.', xp:10 },
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1 is solid black. Shape 2 is the same shape but white (shading reversed). Shape 3 is a solid black diamond. Which option correctly completes the pair?', options:['Solid black diamond','White diamond (outline)','Grey diamond','Solid black circle','Striped diamond'], correct:1, explanation:'Rule: shading reversal — black becomes white, white becomes black. Solid black diamond → white (outline) diamond.', tip:'Shading reversal is one of the most common analogy rules. Go through each element: if it was black it becomes white, and vice versa.', xp:15 }
+  ],
+
+  'Odd One Out': [
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five figures: A) white triangle, B) white square, C) black circle, D) white hexagon, E) white pentagon. Which is the odd one out?', options:['A — white triangle','B — white square','C — black circle','D — white hexagon','E — white pentagon'], correct:2, explanation:'Four shapes (A, B, D, E) are white (unshaded). Only C is solid black. The shared group feature is white fill — C breaks this rule.', tip:'For odd-one-out, look for the feature shared by FOUR of the five shapes. The shape that contradicts that feature is the odd one out.', xp:10 },
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five arrows: A) large arrow up, B) medium arrow up, C) small arrow up, D) large arrow pointing DOWN, E) tiny arrow up. Which is the odd one out?', options:['A','B','C','D — large arrow pointing down','E'], correct:3, explanation:'Four arrows (A, B, C, E) point upward. Only D points downward. Direction is the shared feature; size is irrelevant.', tip:'Ignore features that vary freely within the group (like size). Focus on the feature that is consistent for four of the five.', xp:10 },
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five figures each showing a shape with diagonal lines: A) square with lines \\, B) triangle with lines \\, C) hexagon with lines \\, D) pentagon with lines /, E) oval with lines \\. Which is the odd one out?', options:['A','B','C','D — pentagon with lines going the other way','E'], correct:3, explanation:'Four shapes (A, B, C, E) all have diagonal lines running top-left to bottom-right (\\). Only D has lines running bottom-left to top-right (/). D is the odd one out.', tip:'Line direction matters. Use the edge of your paper as a reference to distinguish \\ from / direction lines.', xp:10 }
+  ],
+
+  'Codes': [
+    { stem:'Work out what each letter codes for, then find the correct code for the test shape.', question:'Shaded circle = SX, Shaded square = SY, White diamond = TZ. What is the code for a WHITE CIRCLE?', options:['SX','SZ','TX','TY','TZ'], correct:2, explanation:'First letter: S = shaded, T = white. Second letter: X = circle, Y = square, Z = diamond. White circle = TX.', tip:'Decode one letter position at a time. Find two shapes sharing the same letter — they share a feature. That feature is what the letter codes for.', xp:10 },
+    { stem:'Work out what each letter codes for, then find the correct code for the test shape.', question:'Large triangle = FP, Large circle = FQ, Small triangle = GP. What is the code for a SMALL CIRCLE?', options:['FP','FQ','GQ','GP','GF'], correct:2, explanation:'First letter: F = large, G = small. Second letter: P = triangle, Q = circle. Small circle = GQ.', tip:'After decoding, verify by re-reading the original shapes: does FP correctly describe a large triangle? If yes, apply the code confidently.', xp:10 },
+    { stem:'Work out what each letter codes for, then find the correct code for the test shape.', question:'Small dotted-outline shape = JK, Large dotted-outline shape = MK, Small solid-outline shape = JL. What is the code for a LARGE SOLID-OUTLINE shape?', options:['JK','ML','JL','MK','KL'], correct:1, explanation:'First letter: J = small, M = large. Second letter: K = dotted outline, L = solid outline. Large solid = ML.', tip:'Outline style (dotted, solid) is a commonly coded feature. Always check the outline style of each shape, not just the fill and shape type.', xp:10 },
+    { stem:'Work out what each letter codes for, then find the correct code for the test shape.', question:'Pentagon with star inside = WL, Hexagon with star inside = XL, Pentagon with square inside = WM. What is the code for a HEXAGON WITH SQUARE INSIDE?', options:['WL','XM','WM','XL','WX'], correct:1, explanation:'Top letter: W = pentagon, X = hexagon. Bottom letter: L = star inside, M = square inside. Hexagon with square = XM.', tip:'In compound shape codes, the first letter often encodes the outer shape and the second letter the inner shape. Check which letter is shared between shapes with the same outer shape.', xp:15 }
+  ],
+
+  'Shape Series': [
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A dot moves clockwise around the corners of a square, one step at a time: top-left, top-right, bottom-right, bottom-left, then empty. Where is it next?', options:['Top-left','Top-right','Bottom-left','Bottom-right','No dot'], correct:0, explanation:'The dot moves clockwise: top-left → top-right → bottom-right → bottom-left → back to top-left. After four steps it returns to the start.', tip:'Always track ONE element at a time. Write out the rule in words before looking at options.', xp:10 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A series shows 1 arrow, 2 arrows, 3 arrows, empty cell, 5 arrows. All arrows point upward. What fills the empty 4th cell?', options:['3 arrows pointing up','4 arrows pointing up','4 arrows pointing down','5 arrows pointing up','2 arrows pointing down'], correct:1, explanation:'One arrow is added each cell. Cell 4 must contain 4 upward arrows.', tip:'For counting sequences, count carefully — easy marks are lost by misreading 3 vs 4.', xp:10 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A 4-point star grows one extra point each step: 4-point, 5-point, 6-point, empty, 8-point. Fill alternates shaded/unshaded starting shaded. Cell 3 is shaded. What fills cell 4?', options:['7-point star, unshaded','7-point star, shaded','6-point star, unshaded','8-point star, unshaded','7-point star, no outline'], correct:0, explanation:'Rule 1: star gains one point per cell (4,5,6,7,8). Rule 2: fill alternates. Cell 3 is shaded so cell 4 must be unshaded. Answer: 7-point star, unshaded.', tip:'When two rules overlap, track each rule separately in your head.', xp:15 },
+    { stem:'A sequence of shapes follows a pattern. Which option correctly fills the empty space?', question:'A rectangle has a vertical dividing line that moves one step right each cell. In cell 1 the line is far left. In cell 5 the line is far right. What does cell 3 show?', options:['Line at far left','Line at second position','Line at centre (middle)','Line at fourth position','No dividing line'], correct:2, explanation:'With 5 cells, the line moves from position 1 to position 5, one step each cell. Cell 3 = middle position = centre of the rectangle.', tip:'For sliding element series, number the positions 1–5. The missing cell\'s position follows obviously from the pattern.', xp:10 }
+  ],
+
+  'Shape Analogies': [
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1: solid black triangle. Shape 2: same triangle as outline (unshaded). Shape 3: solid black circle. Which option correctly completes the pair?', options:['Solid black circle','Outline circle (unshaded)','Solid black square','Outline triangle','Half-shaded circle'], correct:1, explanation:'Rule: solid black → outline (remove fill, keep shape and size). Applying to solid black circle gives outline circle.', tip:'State the transformation as a sentence first: "the shape loses its fill". Then apply ONLY that rule.', xp:10 },
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1: arrow pointing right. Shape 2: same arrow pointing left (rotated 180°). Shape 3: flag pointing up-right. Which option correctly completes the pair?', options:['Flag pointing up-right (unchanged)','Flag pointing down-left (rotated 180°)','Flag pointing up-left (reflected)','Flag pointing down-right','Flag pointing left'], correct:1, explanation:'Rule: 180° rotation. Arrow pointing right → pointing left. Flag pointing up-right, rotated 180° → pointing down-left.', tip:'For rotation, physically rotate the page to visualise the result. 180° = turn upside down.', xp:10 },
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1 is solid black. Shape 2 is the same shape but white (shading reversed). Shape 3 is a solid black diamond. Which option correctly completes the pair?', options:['Solid black diamond','White diamond (outline)','Grey diamond','Solid black circle','Striped diamond'], correct:1, explanation:'Rule: shading reversal — black becomes white. Solid black diamond → white (outline) diamond.', tip:'Shading reversal is one of the most common analogy rules. Black becomes white, white becomes black.', xp:15 },
+    { stem:'The first pair shows a transformation. Apply the same transformation to the third shape.', question:'Shape 1 is a small shield. Shape 2 is a large shield (same outline style). Shape 3 is a small dashed-outline square. Which option correctly completes the pair?', options:['Large solid square','Large dashed-outline square','Small dashed square','Large outline pentagon','Large solid-outline square'], correct:1, explanation:'Rule: the shape grows larger but the outline style and shape type stay the same. Large dashed-outline square.', tip:'Identify which features DO change (size) and which stay the same (outline, shape type). Apply only the change.', xp:10 }
+  ],
+
+  'Similarities': [
+    { stem:'Two figures are alike in some way. Which option is most like them?', question:'Example figures both contain a small SOLID black circle inside a larger outline shape. The outer shapes are different. Which option is most like them? A) large star with solid circle inside  B) large triangle with white circle inside  C) large hexagon with solid circle inside  D) large oval, no inner shape  E) small solid circle alone', options:['Large star, solid circle inside','Large triangle, white circle inside','Large hexagon, solid circle inside','Large oval, no inner shape','Small solid circle alone'], correct:2, explanation:'Shared feature: a small SOLID (filled) circle inside a larger outline shape. The outer shape type is irrelevant. Only C has both features. B has a white (outline) circle, not a solid one.', tip:'Ignore features that DIFFER between examples — those are red herrings. Focus only on what the examples SHARE.', xp:10 },
+    { stem:'Two figures are alike in some way. Which option is most like them?', question:'Both examples show a shape that is exactly half shaded — one half black, one half white, divided by a straight line. One is a circle, one is a rectangle. Which option matches?', options:['Fully shaded triangle','Half-shaded hexagon (left half black, right white)','Unshaded pentagon','Quarter-shaded oval','Triangle with diagonal line, no shading'], correct:1, explanation:'Shared feature: exactly half the shape is solid black, half is white. The shape type is irrelevant. Only B shows exactly half shading.', tip:'When the examples use different shapes, the shape TYPE is the red herring. Ask: what do they share that is NOT the shape type?', xp:10 },
+    { stem:'Two figures are alike in some way. Which option is most like them?', question:'Both examples show a large shape containing exactly TWO smaller shapes inside it. One has a square containing a triangle and a circle; the other a pentagon containing a diamond and a cross. Which option matches?', options:['Large circle containing one small square','Large hexagon containing three small dots','Large triangle containing a circle and a star','Large rectangle, no inner shapes','Small square containing two shapes'], correct:2, explanation:'Shared feature: a large outer shape containing exactly TWO inner shapes. Option C is a large triangle with two inner shapes (circle and star).', tip:'Count elements carefully. "Two smaller shapes" means exactly two — not one, not three.', xp:10 },
+    { stem:'Two figures are alike in some way. Which option is most like them?', question:'Both examples show a large shape with diagonal shading AND a small white shape floating outside (not touching) the large shape. Which option matches?', options:['Diagonally shaded large shape, small white shape touching its edge','Diagonally shaded large shape, small white shape separate from it','Unshaded large shape, small white shape outside','Diagonally shaded large shape, no small shape','Large shape with dots fill, small white shape outside'], correct:1, explanation:'Two features must BOTH be present: (1) diagonal shading on large shape AND (2) small white shape that is separate (not touching). Only B satisfies both.', tip:'When examples share two features, both must appear in the answer. Options satisfying only ONE feature are deliberate distractors.', xp:15 }
+  ],
+
+  'Odd One Out': [
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five figures: A) white triangle, B) white square, C) black circle, D) white hexagon, E) white pentagon.', options:['A — white triangle','B — white square','C — black circle','D — white hexagon','E — white pentagon'], correct:2, explanation:'Four shapes (A, B, D, E) are white (unshaded). Only C is solid black. The shared group feature is white fill — C breaks this rule.', tip:'Look for the feature shared by FOUR of the five shapes. The shape that lacks that feature is the odd one out.', xp:10 },
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five arrows: A) large arrow pointing up, B) medium arrow pointing up, C) small arrow pointing up, D) large arrow pointing DOWN, E) tiny arrow pointing up.', options:['A — large arrow up','B — medium arrow up','C — small arrow up','D — large arrow pointing down','E — tiny arrow up'], correct:3, explanation:'Four arrows (A, B, C, E) point upward. Only D points downward. Size varies freely — it is a red herring.', tip:'Ignore features that vary freely within the group (like size). Focus on the feature that is CONSISTENT for four of the five.', xp:10 },
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five figures each with diagonal lines: A) square with \\ lines, B) triangle with \\ lines, C) hexagon with \\ lines, D) pentagon with / lines, E) oval with \\ lines.', options:['A — square, backslash lines','B — triangle, backslash lines','C — hexagon, backslash lines','D — pentagon, forward-slash lines','E — oval, backslash lines'], correct:3, explanation:'Four shapes (A, B, C, E) have lines running top-left to bottom-right (\\). Only D has lines running bottom-left to top-right (/). D is the odd one out.', tip:'Line direction matters. Use the edge of your paper as a reference to distinguish \\ from / direction lines.', xp:10 },
+    { stem:'Four of the five figures share a common feature. Which is the ODD ONE OUT?', question:'Five compound figures: A) circle with triangle inside, B) square with diamond inside, C) pentagon with cross inside, D) hexagon with circle inside, E) triangle with a small square OUTSIDE it (not inside).', options:['A — inner triangle','B — inner diamond','C — inner cross','D — inner circle','E — square outside (not inside)'], correct:4, explanation:'Four figures (A–D) have a small shape INSIDE a larger shape. In E, the small square is outside the triangle. The shared feature is containment; E breaks this.', tip:'Spatial relationships (inside/outside/touching) are a key feature category. Quickly identify the spatial relationship in each figure.', xp:15 }
+  ],
+
+  'Matrix Completion': [
+    { stem:'A 3×3 grid has one empty square. Find which option should fill it to complete the pattern.', question:'Each row and column contains one circle, one pentagon, and one shield. Row 1: circle, pentagon, shield. Row 2: pentagon, shield, circle. Row 3: shield, circle, empty. What fills the empty bottom-right square?', options:['Circle','Pentagon','Shield','Triangle','Diamond'], correct:1, explanation:'Like a Sudoku: each row and column has each shape once. Row 3 has shield and circle, so missing = pentagon. Column 3 has shield and circle (rows 1 and 2), confirming: pentagon.', tip:'Treat 3×3 matrices like a visual Sudoku. Identify what is missing from both the row AND the column — both must agree.', xp:10 },
+    { stem:'A 3×3 grid has one empty square. Find which option should fill it to complete the pattern.', question:'Left column = filled circles, right column = circle outlines. Top row = large, middle row = medium, bottom row = small. The bottom-right cell is empty. What fills it?', options:['Large filled circle','Small filled circle','Small circle outline','Medium circle outline','No circle'], correct:2, explanation:'Row rule (bottom): small size. Column rule (right): circle outline. Empty cell = small circle outline.', tip:'Rows often control one feature (size), columns control another (fill). The missing cell inherits both the row rule AND the column rule.', xp:10 },
+    { stem:'A 3×3 grid has one empty square. Find which option should fill it to complete the pattern.', question:'Reading across each row, the shape rotates 90° clockwise at each step. Row 2 shows: pointing down (col 1), pointing left (col 2), empty (col 3). What fills the empty cell?', options:['Pointing right','Pointing up','Pointing down','Pointing left','Pointing diagonally'], correct:1, explanation:'Each step rotates 90° clockwise: down → left → UP. Cell (2,3) = pointing up.', tip:'For rotation matrices, establish direction (clockwise/anticlockwise) and step size (90°) from two consecutive cells, then apply mechanically.', xp:10 },
+    { stem:'A 3×3 grid has one empty square. Find which option should fill it to complete the pattern.', question:'The shading follows a diagonal pattern: positions (1,1), (2,2), (3,3) are grey; all other cells are white. The bottom-right cell (3,3) is empty. What fill should it have?', options:['White fill','Grey fill','Black fill','Diagonal lines','No fill'], correct:1, explanation:'The main diagonal (top-left to bottom-right) shows grey cells. Position (3,3) is on this diagonal, so it must be grey.', tip:'After checking rows and columns, always check both diagonals for an additional pattern. In harder questions, the diagonal rule is the key.', xp:15 }
   ]
+
 };
 
 // ── STATE ──
@@ -1096,6 +1571,78 @@ function toggleHW(el){
     document.getElementById('xpNum').textContent=xp;
   }
 }
+
+// ── AI-POWERED QUESTION ENGINE ──
+// Override openTopic to use AI generation
+const _origOpenTopic = openTopic;
+async function openTopic(topicName) {
+  _origOpenTopic(topicName);
+}
+
+// Override nextQuestion to sometimes use AI
+let useAI = true;
+let aiQueuedQuestion = null;
+
+// Pre-fetch next AI question in background
+async function prefetchAIQuestion(subject, topic) {
+  if (!useAI) return;
+  aiQueuedQuestion = await generateAIQuestion(subject, topic);
+}
+
+// Patch the question display to use AI after bank is exhausted
+const _origShowQ = showQ;
+function showQ(){
+  // If we have a queued AI question and we're near end of bank, use it
+  if(aiQueuedQuestion && currentQIdx >= currentQBank.length - 1) {
+    currentQBank.push(aiQueuedQuestion);
+    aiQueuedQuestion = null;
+    // Pre-fetch next one
+    if(currentSubject && currentTopic) prefetchAIQuestion(currentSubject, currentTopic);
+  }
+  _origShowQ();
+}
+
+// ── SAVE PROGRESS ON SESSION END ──
+const _origCloseCelebration = closeCelebration;
+function closeCelebration(){
+  // Save progress to Supabase
+  if(currentUser && currentSubject && currentTopic) {
+    saveProgress(currentSubject, currentTopic, correctCount, currentQBank.length, xp);
+  }
+  _origCloseCelebration();
+}
+
+// ── SIGN OUT BUTTON ──
+function addHeaderButtons() {
+  const header = document.querySelector('.header-right');
+  if (!header) return;
+  // Add sign out button if not already there
+  if (!document.getElementById('signOutBtn')) {
+    const btn = document.createElement('button');
+    btn.id = 'signOutBtn';
+    btn.onclick = handleSignOut;
+    btn.textContent = 'Sign Out';
+    btn.style.cssText = 'padding:6px 14px;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;font-family:Nunito,sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-left:8px;';
+    header.appendChild(btn);
+
+    // Add parent dashboard button if user is parent
+    if(currentProfile && currentProfile.role === 'parent') {
+      const dashBtn = document.createElement('button');
+      dashBtn.onclick = openParentDashboard;
+      dashBtn.textContent = '📊 Dashboard';
+      dashBtn.style.cssText = 'padding:6px 14px;background:rgba(108,99,255,0.3);border:none;border-radius:8px;color:#fff;font-family:Nunito,sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-left:8px;';
+      header.appendChild(dashBtn);
+    }
+  }
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', async () => {
+  await checkAuth();
+  // Add header buttons after app loads
+  setTimeout(addHeaderButtons, 500);
+});
 </script>
+</div><!-- /appScreen -->
 </body>
 </html>
