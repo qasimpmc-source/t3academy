@@ -1,15 +1,50 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  
-  const keyExists = !!process.env.ANTHROPIC_API_KEY;
-  const keyLength = process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length : 0;
-  const keyStart = process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.substring(0, 10) + '...' : 'NOT FOUND';
-  
-  return res.status(200).json({
-    keyExists,
-    keyLength,
-    keyStart,
-    nodeEnv: process.env.NODE_ENV,
-    allEnvKeys: Object.keys(process.env).filter(k => !k.includes('npm') && !k.includes('PATH')).join(', ')
-  });
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  if (!apiKey) {
+    return res.status(200).json({
+      reply: '🦉 API key missing — check Vercel environment variables.'
+    });
+  }
+
+  try {
+    const { messages, systemPrompt } = req.body;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: systemPrompt || 'You are Ollie the Owl, a friendly AI tutor helping children aged 9-11 prepare for the 11+ exam. Be warm and encouraging. Keep responses to 3-4 sentences.',
+        messages: messages
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(200).json({
+        reply: '🦉 API error: ' + (data.error?.message || JSON.stringify(data))
+      });
+    }
+
+    return res.status(200).json({ reply: data.content[0].text });
+
+  } catch (error) {
+    return res.status(200).json({
+      reply: '🦉 Error: ' + error.message
+    });
+  }
 }
