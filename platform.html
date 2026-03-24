@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>T3 Academy — 11+ Learning Hub</title>
@@ -1573,11 +1573,15 @@ function toggleHW(el){
 }
 
 // ── AI-POWERED QUESTION ENGINE ──
-// Override openTopic to use AI generation
+// Pre-fetch AI question in background when topic opens
 const _origOpenTopic = openTopic;
-async function openTopic(topicName) {
+openTopic = async function(topicName) {
   _origOpenTopic(topicName);
-}
+  // Pre-fetch first AI question in background
+  if(currentSubject && topicName) {
+    prefetchAIQuestion(currentSubject, topicName);
+  }
+};
 
 // Override nextQuestion to sometimes use AI
 let useAI = true;
@@ -1589,28 +1593,28 @@ async function prefetchAIQuestion(subject, topic) {
   aiQueuedQuestion = await generateAIQuestion(subject, topic);
 }
 
-// Patch the question display to use AI after bank is exhausted
+// Patch showQ to inject AI questions when bank is exhausted
 const _origShowQ = showQ;
-function showQ(){
-  // If we have a queued AI question and we're near end of bank, use it
+showQ = function(){
+  // If we have a queued AI question and we're at the end of the bank, add it
   if(aiQueuedQuestion && currentQIdx >= currentQBank.length - 1) {
     currentQBank.push(aiQueuedQuestion);
     aiQueuedQuestion = null;
-    // Pre-fetch next one
+    // Pre-fetch next one in background
     if(currentSubject && currentTopic) prefetchAIQuestion(currentSubject, currentTopic);
   }
   _origShowQ();
-}
+};
 
 // ── SAVE PROGRESS ON SESSION END ──
 const _origCloseCelebration = closeCelebration;
-function closeCelebration(){
+closeCelebration = function(){
   // Save progress to Supabase
   if(currentUser && currentSubject && currentTopic) {
     saveProgress(currentSubject, currentTopic, correctCount, currentQBank.length, xp);
   }
   _origCloseCelebration();
-}
+};
 
 // ── SIGN OUT BUTTON ──
 function addHeaderButtons() {
