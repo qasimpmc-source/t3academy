@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
 
   } catch (error) {
     return res.status(200).json({
-      reply: '🦉 Error: ' + error.message
+      reply: '🦉 Exact error: ' + error.message + ' | type: ' + error.constructor.name
     });
   }
 }
