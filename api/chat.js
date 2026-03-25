@@ -19,7 +19,7 @@ module.exports = async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
+        model: 'claude-sonnet-4-5',
         max_tokens: 512,
         system: systemPrompt || 'You are Ollie the Owl, a friendly AI tutor helping children aged 9-11 prepare for the 11+ exam. Be warm and encouraging. Keep responses to 3-4 sentences.',
         messages: messages
