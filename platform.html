@@ -192,234 +192,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<script>
-// ── QUESTION BANKS ──
-// banks loaded via separate script tag below
 
-// ── STATE ──
-let banks = {};
-let currentSubject = '';
-let currentTopic = '';
-let currentQBank = [];
-let currentIdx = 0;
-let selected = null;
-let correct = 0;
-let totalDone = 0;
-let totalCorrect = 0;
 
-// ── SHUFFLE ──
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
-}
 
-function shuffleQ(q) {
-  const opts = q.options || q.opts || [];
-  const ans = q.correct !== undefined ? q.correct : q.ans;
-  const correctText = opts[ans];
-  const shuffled = shuffle(opts);
-  return {...q, options: shuffled, opts: shuffled, correct: shuffled.indexOf(correctText), ans: shuffled.indexOf(correctText)};
-}
-
-// ── INIT ──
-function init() {
-  try {
-    banks = {
-      english: typeof englishBank !== 'undefined' ? englishBank : {},
-      maths: typeof MATHS !== 'undefined' ? MATHS : {},
-      verbal: typeof VR !== 'undefined' ? VR : {},
-      nvr: typeof nvrBank !== 'undefined' ? nvrBank : {}
-    };
-
-    const counts = {
-      english: Object.values(banks.english).reduce((s,a)=>s+a.length,0),
-      maths: Object.values(banks.maths).reduce((s,a)=>s+a.length,0),
-      verbal: Object.values(banks.verbal).reduce((s,a)=>s+a.length,0),
-      nvr: Object.values(banks.nvr).reduce((s,a)=>s+a.length,0),
-    };
-
-    Object.entries(counts).forEach(([s,c]) => {
-      const el = document.getElementById('cnt-'+s);
-      if (el) el.textContent = c + ' questions';
-    });
-
-    console.log('T3 Banks loaded:', counts);
-  } catch(e) {
-    console.error('Bank init error:', e);
-  }
-}
-
-// ── VIEWS ──
-function show(id) {
-  ['homeView','topicView','questionView','completeView'].forEach(v => {
-    document.getElementById(v).style.display = v===id ? 'block' : 'none';
-  });
-  window.scrollTo(0,0);
-}
-
-function goHome() { show('homeView'); }
-
-// ── SUBJECTS ──
-function openSubject(subj) {
-  currentSubject = subj;
-  const names = {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'};
-  document.getElementById('topicTitle').textContent = names[subj] || subj;
-  const topics = Object.keys(banks[subj] || {});
-  document.getElementById('topicsGrid').innerHTML = topics.map(t => `
-    <div class="topic-card" onclick="startTopic('${subj}','${encodeURIComponent(t)}')">
-      <div class="topic-name">${t}</div>
-      <div class="topic-count">${(banks[subj][t]||[]).length} questions</div>
-    </div>
-  `).join('') || '<p style="color:var(--muted)">No topics found.</p>';
-  show('topicView');
-}
-
-// ── START TOPIC ──
-function startTopic(subj, topicEnc) {
-  const topic = decodeURIComponent(topicEnc);
-  currentSubject = subj;
-  currentTopic = topic;
-  const raw = banks[subj]?.[topic] || [];
-  currentQBank = shuffle(raw).map(shuffleQ);
-  currentIdx = 0;
-  correct = 0;
-  const names = {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'};
-  document.getElementById('qTag').textContent = `${names[subj]} — ${topic}`;
-  show('questionView');
-  showQ();
-}
-
-// ── SHOW QUESTION ──
-function showQ() {
-  const q = currentQBank[currentIdx];
-  if (!q) { showComplete(); return; }
-
-  selected = null;
-  document.getElementById('checkBtn').disabled = true;
-  document.getElementById('checkBtn').style.display = '';
-  document.getElementById('nextBtn').style.display = 'none';
-  document.getElementById('resultBox').style.display = 'none';
-  document.getElementById('resultBox').innerHTML = '';
-
-  // Progress bar
-  document.getElementById('progressBar').style.width = (currentIdx/currentQBank.length*100)+'%';
-  document.getElementById('qMeta').textContent = `Q${currentIdx+1} of ${currentQBank.length}`;
-
-  // Stem + question
-  const stem = q.stem || '';
-  const question = q.q || q.question || q.stem || '';
-  const stemEl = document.getElementById('qStem');
-  if (stem && question !== stem) {
-    stemEl.textContent = stem;
-    stemEl.style.display = 'block';
-    document.getElementById('qText').textContent = question;
-  } else {
-    stemEl.style.display = 'none';
-    document.getElementById('qText').textContent = question;
-  }
-
-  // Passage
-  const passEl = document.getElementById('qPassage');
-  if (q.passage) { passEl.textContent = q.passage; passEl.style.display = 'block'; }
-  else { passEl.style.display = 'none'; }
-
-  // Options
-  const opts = q.options || q.opts || [];
-  const letters = ['A','B','C','D','E'];
-  document.getElementById('qOptions').innerHTML = opts.map((opt,i) =>
-    `<div class="opt" id="opt${i}" onclick="selectOpt(${i})">
-      <div class="opt-letter">${letters[i]}</div>
-      <div class="opt-text">${opt}</div>
-    </div>`
-  ).join('');
-}
-
-// ── SELECT ──
-function selectOpt(i) {
-  if (document.getElementById('resultBox').style.display !== 'none') return;
-  selected = i;
-  document.querySelectorAll('.opt').forEach((el,idx) => el.classList.toggle('selected', idx===i));
-  document.getElementById('checkBtn').disabled = false;
-}
-
-// ── CHECK ──
-function checkAnswer() {
-  if (selected === null) return;
-  const q = currentQBank[currentIdx];
-  const ans = q.correct !== undefined ? q.correct : q.ans;
-  const isCorrect = selected === ans;
-  if (isCorrect) { correct++; totalCorrect++; }
-  totalDone++;
-
-  document.getElementById('totalCorrect').textContent = totalCorrect;
-  document.getElementById('totalDone').textContent = totalDone;
-
-  document.querySelectorAll('.opt').forEach((el,i) => {
-    if (i === ans) el.classList.add('correct');
-    else if (i === selected && !isCorrect) el.classList.add('wrong');
-  });
-
-  const exp = q.exp || q.explanation || '';
-  const tip = q.tip || '';
-  const res = document.getElementById('resultBox');
-  res.innerHTML = `<div class="result-box ${isCorrect?'correct':'wrong'}">
-    <div class="result-title ${isCorrect?'correct':'wrong'}">${isCorrect ? '✅ Correct!' : '❌ Not quite...'}</div>
-    <div class="result-exp">${exp || 'Keep practising!'}</div>
-    ${tip ? `<div class="result-tip">💡 Exam tip: ${tip}</div>` : ''}
-  </div>`;
-  res.style.display = 'block';
-
-  document.getElementById('checkBtn').style.display = 'none';
-  document.getElementById('nextBtn').style.display = '';
-}
-
-// ── HINT ──
-function showHint() {
-  const q = currentQBank[currentIdx];
-  const tip = q.tip || q.hint || 'Read each option carefully before choosing.';
-  const res = document.getElementById('resultBox');
-  res.innerHTML = `<div class="result-box" style="background:#fffbeb;border:1px solid #fde68a;">
-    <div class="result-title" style="color:#92400e;">💡 Hint</div>
-    <div class="result-exp">${tip}</div>
-  </div>`;
-  res.style.display = 'block';
-}
-
-// ── NEXT ──
-function nextQ() {
-  currentIdx++;
-  if (currentIdx >= currentQBank.length) showComplete();
-  else showQ();
-}
-
-// ── COMPLETE ──
-function showComplete() {
-  const total = currentQBank.length;
-  const acc = total > 0 ? Math.round(correct/total*100) : 0;
-  const trophy = acc >= 90 ? '🏆' : acc >= 75 ? '🥇' : acc >= 60 ? '🥈' : acc >= 40 ? '🥉' : '📝';
-  const msg = acc >= 90 ? 'Outstanding! Platinum level!' : acc >= 75 ? 'Excellent! Gold level!' : acc >= 60 ? 'Great work! Silver level!' : acc >= 40 ? 'Good effort! Bronze level!' : 'Keep practising!';
-
-  document.getElementById('trophy').textContent = trophy;
-  document.getElementById('completeTitle').textContent = msg;
-  document.getElementById('completeSub').textContent = currentTopic + ' — ' + {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'}[currentSubject];
-  document.getElementById('cs1').textContent = correct+'/'+total;
-  document.getElementById('cs2').textContent = acc+'%';
-  document.getElementById('cs3').textContent = total;
-  show('completeView');
-}
-
-// ── RETRY ──
-function retryTopic() {
-  startTopic(currentSubject, encodeURIComponent(currentTopic));
-}
-
-// ── START ──
-window.addEventListener('DOMContentLoaded', init);
-</script>
 
 <script>
 // T3 Academy — Verbal Reasoning Complete Question Bank
@@ -1114,6 +889,233 @@ const NVR_TOTAL = Object.values(nvrBank).reduce((s,a)=>s+a.length,0);
 
 if (typeof module !== 'undefined') 
 </script>
+<script>
+// ── QUESTION BANKS ──
+// banks loaded via separate script tag below
 
+// ── STATE ──
+let banks = {};
+let currentSubject = '';
+let currentTopic = '';
+let currentQBank = [];
+let currentIdx = 0;
+let selected = null;
+let correct = 0;
+let totalDone = 0;
+let totalCorrect = 0;
+
+// ── SHUFFLE ──
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function shuffleQ(q) {
+  const opts = q.options || q.opts || [];
+  const ans = q.correct !== undefined ? q.correct : q.ans;
+  const correctText = opts[ans];
+  const shuffled = shuffle(opts);
+  return {...q, options: shuffled, opts: shuffled, correct: shuffled.indexOf(correctText), ans: shuffled.indexOf(correctText)};
+}
+
+// ── INIT ──
+function init() {
+  try {
+    banks = {
+      english: typeof englishBank !== 'undefined' ? englishBank : {},
+      maths: typeof MATHS !== 'undefined' ? MATHS : {},
+      verbal: typeof VR !== 'undefined' ? VR : {},
+      nvr: typeof nvrBank !== 'undefined' ? nvrBank : {}
+    };
+
+    const counts = {
+      english: Object.values(banks.english).reduce((s,a)=>s+a.length,0),
+      maths: Object.values(banks.maths).reduce((s,a)=>s+a.length,0),
+      verbal: Object.values(banks.verbal).reduce((s,a)=>s+a.length,0),
+      nvr: Object.values(banks.nvr).reduce((s,a)=>s+a.length,0),
+    };
+
+    Object.entries(counts).forEach(([s,c]) => {
+      const el = document.getElementById('cnt-'+s);
+      if (el) el.textContent = c + ' questions';
+    });
+
+    console.log('T3 Banks loaded:', counts);
+  } catch(e) {
+    console.error('Bank init error:', e);
+  }
+}
+
+// ── VIEWS ──
+function show(id) {
+  ['homeView','topicView','questionView','completeView'].forEach(v => {
+    document.getElementById(v).style.display = v===id ? 'block' : 'none';
+  });
+  window.scrollTo(0,0);
+}
+
+function goHome() { show('homeView'); }
+
+// ── SUBJECTS ──
+function openSubject(subj) {
+  currentSubject = subj;
+  const names = {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'};
+  document.getElementById('topicTitle').textContent = names[subj] || subj;
+  const topics = Object.keys(banks[subj] || {});
+  document.getElementById('topicsGrid').innerHTML = topics.map(t => `
+    <div class="topic-card" onclick="startTopic('${subj}','${encodeURIComponent(t)}')">
+      <div class="topic-name">${t}</div>
+      <div class="topic-count">${(banks[subj][t]||[]).length} questions</div>
+    </div>
+  `).join('') || '<p style="color:var(--muted)">No topics found.</p>';
+  show('topicView');
+}
+
+// ── START TOPIC ──
+function startTopic(subj, topicEnc) {
+  const topic = decodeURIComponent(topicEnc);
+  currentSubject = subj;
+  currentTopic = topic;
+  const raw = banks[subj]?.[topic] || [];
+  currentQBank = shuffle(raw).map(shuffleQ);
+  currentIdx = 0;
+  correct = 0;
+  const names = {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'};
+  document.getElementById('qTag').textContent = `${names[subj]} — ${topic}`;
+  show('questionView');
+  showQ();
+}
+
+// ── SHOW QUESTION ──
+function showQ() {
+  const q = currentQBank[currentIdx];
+  if (!q) { showComplete(); return; }
+
+  selected = null;
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('checkBtn').style.display = '';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('resultBox').style.display = 'none';
+  document.getElementById('resultBox').innerHTML = '';
+
+  // Progress bar
+  document.getElementById('progressBar').style.width = (currentIdx/currentQBank.length*100)+'%';
+  document.getElementById('qMeta').textContent = `Q${currentIdx+1} of ${currentQBank.length}`;
+
+  // Stem + question
+  const stem = q.stem || '';
+  const question = q.q || q.question || q.stem || '';
+  const stemEl = document.getElementById('qStem');
+  if (stem && question !== stem) {
+    stemEl.textContent = stem;
+    stemEl.style.display = 'block';
+    document.getElementById('qText').textContent = question;
+  } else {
+    stemEl.style.display = 'none';
+    document.getElementById('qText').textContent = question;
+  }
+
+  // Passage
+  const passEl = document.getElementById('qPassage');
+  if (q.passage) { passEl.textContent = q.passage; passEl.style.display = 'block'; }
+  else { passEl.style.display = 'none'; }
+
+  // Options
+  const opts = q.options || q.opts || [];
+  const letters = ['A','B','C','D','E'];
+  document.getElementById('qOptions').innerHTML = opts.map((opt,i) =>
+    `<div class="opt" id="opt${i}" onclick="selectOpt(${i})">
+      <div class="opt-letter">${letters[i]}</div>
+      <div class="opt-text">${opt}</div>
+    </div>`
+  ).join('');
+}
+
+// ── SELECT ──
+function selectOpt(i) {
+  if (document.getElementById('resultBox').style.display !== 'none') return;
+  selected = i;
+  document.querySelectorAll('.opt').forEach((el,idx) => el.classList.toggle('selected', idx===i));
+  document.getElementById('checkBtn').disabled = false;
+}
+
+// ── CHECK ──
+function checkAnswer() {
+  if (selected === null) return;
+  const q = currentQBank[currentIdx];
+  const ans = q.correct !== undefined ? q.correct : q.ans;
+  const isCorrect = selected === ans;
+  if (isCorrect) { correct++; totalCorrect++; }
+  totalDone++;
+
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+  document.getElementById('totalDone').textContent = totalDone;
+
+  document.querySelectorAll('.opt').forEach((el,i) => {
+    if (i === ans) el.classList.add('correct');
+    else if (i === selected && !isCorrect) el.classList.add('wrong');
+  });
+
+  const exp = q.exp || q.explanation || '';
+  const tip = q.tip || '';
+  const res = document.getElementById('resultBox');
+  res.innerHTML = `<div class="result-box ${isCorrect?'correct':'wrong'}">
+    <div class="result-title ${isCorrect?'correct':'wrong'}">${isCorrect ? '✅ Correct!' : '❌ Not quite...'}</div>
+    <div class="result-exp">${exp || 'Keep practising!'}</div>
+    ${tip ? `<div class="result-tip">💡 Exam tip: ${tip}</div>` : ''}
+  </div>`;
+  res.style.display = 'block';
+
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = '';
+}
+
+// ── HINT ──
+function showHint() {
+  const q = currentQBank[currentIdx];
+  const tip = q.tip || q.hint || 'Read each option carefully before choosing.';
+  const res = document.getElementById('resultBox');
+  res.innerHTML = `<div class="result-box" style="background:#fffbeb;border:1px solid #fde68a;">
+    <div class="result-title" style="color:#92400e;">💡 Hint</div>
+    <div class="result-exp">${tip}</div>
+  </div>`;
+  res.style.display = 'block';
+}
+
+// ── NEXT ──
+function nextQ() {
+  currentIdx++;
+  if (currentIdx >= currentQBank.length) showComplete();
+  else showQ();
+}
+
+// ── COMPLETE ──
+function showComplete() {
+  const total = currentQBank.length;
+  const acc = total > 0 ? Math.round(correct/total*100) : 0;
+  const trophy = acc >= 90 ? '🏆' : acc >= 75 ? '🥇' : acc >= 60 ? '🥈' : acc >= 40 ? '🥉' : '📝';
+  const msg = acc >= 90 ? 'Outstanding! Platinum level!' : acc >= 75 ? 'Excellent! Gold level!' : acc >= 60 ? 'Great work! Silver level!' : acc >= 40 ? 'Good effort! Bronze level!' : 'Keep practising!';
+
+  document.getElementById('trophy').textContent = trophy;
+  document.getElementById('completeTitle').textContent = msg;
+  document.getElementById('completeSub').textContent = currentTopic + ' — ' + {english:'English',maths:'Maths',verbal:'Verbal Reasoning',nvr:'Non-Verbal Reasoning'}[currentSubject];
+  document.getElementById('cs1').textContent = correct+'/'+total;
+  document.getElementById('cs2').textContent = acc+'%';
+  document.getElementById('cs3').textContent = total;
+  show('completeView');
+}
+
+// ── RETRY ──
+function retryTopic() {
+  startTopic(currentSubject, encodeURIComponent(currentTopic));
+}
+
+// ── START ──
+window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
